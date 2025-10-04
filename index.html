@@ -1,0 +1,1101 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Moving Medicine - Resident Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <!-- Header -->
+    <nav class="navbar navbar-expand-lg navbar-dark py-3">
+      <div class="container">
+        <a class="navbar-brand fw-bold" href="#">Moving Medicine</a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navMenu"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navMenu">
+          <ul class="navbar-nav ms-auto align-items-center">
+            <li class="nav-item"><a class="nav-link" href="#">Home</a></li>
+            <li class="nav-item"><a class="nav-link" href="#">Services</a></li>
+            <li class="nav-item"><a class="nav-link" href="#">Resources</a></li>
+            <li class="nav-item"><a class="nav-link" href="#">Shop</a></li>
+            <li class="nav-item ms-3">
+              <a class="btn btn-main" href="#">Appointment</a>
+            </li>
+            <li class="nav-item ms-3">
+              <button class="btn btn-cart position-relative" id="cartBtn">
+                <i class="bi bi-cart3"></i>
+                <span
+                  class="cart-badge position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+                  id="cartCount"
+                  >0</span
+                >
+              </button>
+            </li>
+            <li class="nav-item ms-3">
+              <button class="btn btn-outline-light" id="loginBtn">Login</button>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+      <div class="container">
+        <h1 class="mb-4">Healthy Tablets and Medicine</h1>
+        <p class="lead mb-4 text-muted">
+          Find the best medicines and healthcare products near you
+        </p>
+        <div class="input-group mb-3 w-75 mx-auto">
+          <select class="form-select" id="categorySelect">
+            <option selected>All Category</option>
+            <option>Medicine</option>
+            <option>Wellness</option>
+            <option>Diagnostics</option>
+            <option>Supplements</option>
+          </select>
+          <input
+            type="text"
+            class="form-control"
+            id="searchInput"
+            placeholder="Search for medicine, device, or supplement..."
+          />
+          <button class="btn btn-main" id="searchBtn">
+            <i class="bi bi-search me-2"></i>Find Medicine
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Services Section -->
+    <section class="py-5">
+      <div class="container text-center">
+        <h4 class="mb-4">Our Services</h4>
+        <div class="row g-4">
+          <div class="col-12 col-sm-6 col-lg-3">
+            <div class="category-icon">
+              <i class="bi bi-capsule"></i>
+              <h5 class="mt-2">Medicine</h5>
+              <p>Browse and order trusted medicines for your needs.</p>
+            </div>
+          </div>
+          <div class="col-12 col-sm-6 col-lg-3">
+            <div class="category-icon">
+              <i class="bi bi-heart-pulse"></i>
+              <h5 class="mt-2">Wellness</h5>
+              <p>Discover wellness products for a healthier lifestyle.</p>
+            </div>
+          </div>
+          <div class="col-12 col-sm-6 col-lg-3">
+            <div class="category-icon">
+              <i class="bi bi-clipboard2-pulse"></i>
+              <h5 class="mt-2">Diagnostic</h5>
+              <p>Access diagnostic tools and health check services.</p>
+            </div>
+          </div>
+          <div class="col-12 col-sm-6 col-lg-3">
+            <div class="category-icon">
+              <i class="bi bi-journal-medical"></i>
+              <h5 class="mt-2">Health Corner</h5>
+              <p>Read tips and advice for your daily health journey.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Map & Nearest Pharmacy Section -->
+    <section class="container my-5">
+      <div class="row">
+        <div class="col-lg-8 mb-4 mb-lg-0">
+          <div
+            id="pharmacyMap"
+            style="
+              height: 400px;
+              border-radius: 15px;
+              box-shadow: 0 4px 10px rgba(0, 0, 0, 0.07);
+            "
+          ></div>
+        </div>
+        <div class="col-lg-4">
+          <div class="card h-100 shadow-sm">
+            <div class="card-body">
+              <h5 class="card-title mb-3">
+                Nearby Pharmacies with "Paracetamol"
+              </h5>
+              <ul class="list-group list-group-flush">
+                <li
+                  class="list-group-item d-flex justify-content-between align-items-center"
+                >
+                  <div>
+                    <strong>HealthFirst Pharmacy</strong><br />
+                    <small>123 Main St. (0.5 km)</small>
+                  </div>
+                  <span class="badge bg-success rounded-pill">12 in stock</span>
+                </li>
+                <li
+                  class="list-group-item d-flex justify-content-between align-items-center"
+                >
+                  <div>
+                    <strong>CityMed Drugstore</strong><br />
+                    <small>456 Oak Ave. (1.2 km)</small>
+                  </div>
+                  <span class="badge bg-warning rounded-pill">5 in stock</span>
+                </li>
+                <li
+                  class="list-group-item d-flex justify-content-between align-items-center"
+                >
+                  <div>
+                    <strong>WellCare Pharmacy</strong><br />
+                    <small>789 Pine Rd. (2.0 km)</small>
+                  </div>
+                  <span class="badge bg-danger rounded-pill">2 in stock</span>
+                </li>
+              </ul>
+              <div class="mt-3">
+                <small class="text-muted"
+                  >* Prioritized by distance and stock availability.</small
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+      // Sample pharmacy locations (latitude, longitude, name, stock)
+      const pharmacies = [
+        {
+          name: "HealthFirst Pharmacy",
+          lat: 14.5995,
+          lng: 120.9842,
+          stock: 12,
+        },
+        { name: "CityMed Drugstore", lat: 14.601, lng: 120.987, stock: 5 },
+        { name: "WellCare Pharmacy", lat: 14.604, lng: 120.99, stock: 2 },
+      ];
+
+      // Panabo City, Mindanao coordinates
+      const panaboLat = 7.3081,
+        panaboLng = 125.6842;
+      // Initialize map with fallback location (Panabo City)
+      let map = L.map("pharmacyMap").setView([panaboLat, panaboLng], 14);
+      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+        maxZoom: 19,
+        attribution: "© OpenStreetMap",
+      }).addTo(map);
+
+      // Function to add user marker
+      function addUserMarker(lat, lng) {
+        L.marker([lat, lng], {
+          icon: L.icon({
+            iconUrl: "https://cdn-icons-png.flaticon.com/512/149/149060.png",
+            iconSize: [32, 32],
+            iconAnchor: [16, 32],
+          }),
+        })
+          .addTo(map)
+          .bindPopup("You are here")
+          .openPopup();
+        map.setView([lat, lng], 14);
+      }
+
+      // Try to get user's real location
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          function (position) {
+            addUserMarker(position.coords.latitude, position.coords.longitude);
+          },
+          function () {
+            // If denied or error, use Panabo City
+            addUserMarker(panaboLat, panaboLng);
+          }
+        );
+      } else {
+        addUserMarker(panaboLat, panaboLng);
+      }
+
+      // Pharmacy markers
+      pharmacies.forEach((ph, idx) => {
+        const color = idx === 0 ? "green" : ph.stock > 3 ? "orange" : "red";
+        L.marker([ph.lat, ph.lng], {
+          icon: L.divIcon({
+            className: "",
+            html: `<div style=\"background:${color};color:white;padding:4px 8px;border-radius:8px;font-size:0.9rem;\">${ph.name}<br><span style='font-size:0.8em;'>${ph.stock} in stock</span></div>`,
+          }),
+        }).addTo(map);
+      });
+    </script>
+
+    <!-- Dashboard Tabs Section -->
+    <section class="container my-5">
+      <ul
+        class="nav nav-tabs justify-content-center mb-4"
+        id="dashboardTabs"
+        role="tablist"
+      >
+        <li class="nav-item" role="presentation">
+          <button
+            class="nav-link active"
+            id="log-tab"
+            data-bs-toggle="tab"
+            data-bs-target="#log"
+            type="button"
+            role="tab"
+            aria-controls="log"
+            aria-selected="true"
+          >
+            Log Prescription
+          </button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button
+            class="nav-link"
+            id="view-tab"
+            data-bs-toggle="tab"
+            data-bs-target="#view"
+            type="button"
+            role="tab"
+            aria-controls="view"
+            aria-selected="false"
+          >
+            View Prescriptions
+          </button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button
+            class="nav-link"
+            id="reminder-tab"
+            data-bs-toggle="tab"
+            data-bs-target="#reminder"
+            type="button"
+            role="tab"
+            aria-controls="reminder"
+            aria-selected="false"
+          >
+            Reminders
+          </button>
+        </li>
+      </ul>
+      <div class="tab-content" id="dashboardTabsContent">
+        <div
+          class="tab-pane fade show active"
+          id="log"
+          role="tabpanel"
+          aria-labelledby="log-tab"
+        >
+          <div class="row justify-content-center mb-4">
+            <div class="col-md-6">
+              <div class="card shadow-sm h-100">
+                <div class="card-body text-center">
+                  <h5 class="card-title">📝 Log Prescription</h5>
+                  <p class="card-text">
+                    Enter your prescribed medicines with dosage and schedule.
+                  </p>
+                  <a href="log_prescription.php" class="btn btn-success"
+                    >Log Now</a
+                  >
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div
+          class="tab-pane fade"
+          id="view"
+          role="tabpanel"
+          aria-labelledby="view-tab"
+        >
+          <div class="row justify-content-center mb-4">
+            <div class="col-md-6">
+              <div class="card shadow-sm h-100">
+                <div class="card-body text-center">
+                  <h5 class="card-title">📂 View Prescriptions</h5>
+                  <p class="card-text">
+                    Check your saved prescriptions anytime.
+                  </p>
+                  <a
+                    href="view_prescription.php"
+                    class="btn btn-info text-white"
+                    >View</a
+                  >
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div
+          class="tab-pane fade"
+          id="reminder"
+          role="tabpanel"
+          aria-labelledby="reminder-tab"
+        >
+          <div class="row justify-content-center mb-4">
+            <div class="col-md-6">
+              <div class="card shadow-sm h-100">
+                <div class="card-body text-center">
+                  <h5 class="card-title">⏰ Medicine Reminders</h5>
+                  <p class="card-text">Get reminders for intake and refills.</p>
+                  <a href="reminders.php" class="btn btn-warning"
+                    >Set Reminder</a
+                  >
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Categories Section -->
+    <section class="py-5 bg-white">
+      <div class="container text-center">
+        <h4 class="mb-4">Popular Categories</h4>
+        <div class="row justify-content-center g-4">
+          <div class="col-6 col-md-3">
+            <div class="product-card">
+              <img
+                src="images/OTC Deals.jfif"
+                class="img-fluid mb-2"
+                alt="OTC Deals"
+              />
+              <h6>OTC Deals</h6>
+              <p class="text-muted small">Over-the-counter medicines</p>
+            </div>
+          </div>
+          <div class="col-6 col-md-3">
+            <div class="product-card">
+              <img
+                src="images/Medical Devices.jfif"
+                class="img-fluid mb-2"
+                alt="Medical Devices"
+              />
+              <h6>Medical Devices</h6>
+              <p class="text-muted small">Health monitoring tools</p>
+            </div>
+          </div>
+          <div class="col-6 col-md-3">
+            <div class="product-card">
+              <img
+                src="images/Diabetes Care.jfif"
+                class="img-fluid mb-2"
+                alt="Diabetes Care"
+              />
+              <h6>Diabetes Care</h6>
+              <p class="text-muted small">Blood sugar management</p>
+            </div>
+          </div>
+          <div class="col-6 col-md-3">
+            <div class="product-card">
+              <img
+                src="images/Supplements & vitamins.jpg"
+                class="img-fluid mb-2"
+                alt="Fitness & Wellness"
+              />
+              <h6>Fitness & Wellness</h6>
+              <p class="text-muted small">Supplements & vitamins</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Products Section -->
+    <section class="py-5">
+      <div class="container text-center">
+        <h4 class="mb-4">Featured Pharmacy Products</h4>
+        <div class="row g-4">
+          <div class="col-md-3">
+            <div class="product-card">
+              <img
+                src="images/Waterpik_Irrigator_Dental-.png"
+                class="img-fluid mb-3"
+                alt="Waterpik Irrigator Dental"
+              />
+              <h6>Waterpik Irrigator Dental</h6>
+              <p class="text-muted">₱165.45</p>
+              <button class="btn btn-main btn-sm">Add to Cart</button>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="product-card">
+              <img
+                src="images/Waterpik WP-100 Care.png"
+                class="img-fluid mb-3"
+                alt="Waterpik WP-100 Care"
+              />
+              <h6>Waterpik WP-100 Care</h6>
+              <p class="text-muted">₱82.00</p>
+              <button class="btn btn-main btn-sm">Add to Cart</button>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="product-card">
+              <img
+                src="images/Siro_Lorastad.png"
+                class="img-fluid mb-3"
+                alt="Siro Lorastad SP"
+              />
+              <h6>Siro Lorastad SP</h6>
+              <p class="text-muted">₱140.89</p>
+              <button class="btn btn-main btn-sm">Add to Cart</button>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="product-card">
+              <img
+                src="images/Organika_Salmon_Collagen-.png"
+                class="img-fluid mb-3"
+                alt="Organika Salmon Collagen"
+              />
+              <h6>Organika Salmon Collagen</h6>
+              <p class="text-muted">₱74.00</p>
+              <button class="btn btn-main btn-sm">Add to Cart</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer Section -->
+    <footer class="footer">
+      <div class="container">
+        <div class="row g-4">
+          <!-- About Section -->
+          <div class="col-lg-4 col-md-6">
+            <h5 class="footer-title">Moving Medicine</h5>
+            <p class="footer-text">
+              Your trusted partner for healthcare solutions. We provide quality
+              medicines, wellness products, and healthcare services to keep you
+              healthy.
+            </p>
+            <div class="social-links">
+              <a href="#" class="social-icon"><i class="bi bi-facebook"></i></a>
+              <a href="#" class="social-icon"><i class="bi bi-twitter"></i></a>
+              <a href="#" class="social-icon"
+                ><i class="bi bi-instagram"></i
+              ></a>
+              <a href="#" class="social-icon"><i class="bi bi-linkedin"></i></a>
+            </div>
+          </div>
+
+          <!-- Quick Links -->
+          <div class="col-lg-2 col-md-6">
+            <h5 class="footer-title">Quick Links</h5>
+            <ul class="footer-links">
+              <li><a href="#">Home</a></li>
+              <li><a href="#">About Us</a></li>
+              <li><a href="#">Services</a></li>
+              <li><a href="#">Shop</a></li>
+              <li><a href="#">Contact</a></li>
+            </ul>
+          </div>
+
+          <!-- Services -->
+          <div class="col-lg-2 col-md-6">
+            <h5 class="footer-title">Services</h5>
+            <ul class="footer-links">
+              <li><a href="#">Prescription</a></li>
+              <li><a href="#">Consultation</a></li>
+              <li><a href="#">Diagnostics</a></li>
+              <li><a href="#">Wellness</a></li>
+              <li><a href="#">Home Delivery</a></li>
+            </ul>
+          </div>
+
+          <!-- Contact Info -->
+          <div class="col-lg-4 col-md-6">
+            <h5 class="footer-title">Contact Us</h5>
+            <ul class="footer-contact">
+              <li>
+                <i class="bi bi-geo-alt-fill"></i>
+                <span>123 Healthcare Street, Panabo City, Mindanao</span>
+              </li>
+              <li>
+                <i class="bi bi-telephone-fill"></i>
+                <span>+63 123 456 7890</span>
+              </li>
+              <li>
+                <i class="bi bi-envelope-fill"></i>
+                <span>info@movingmedicine.com</span>
+              </li>
+              <li>
+                <i class="bi bi-clock-fill"></i>
+                <span>Mon - Sat: 8:00 AM - 8:00 PM</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Footer Bottom -->
+        <div class="footer-bottom">
+          <div class="row align-items-center">
+            <div class="col-md-6 text-center text-md-start">
+              <p class="mb-0">
+                &copy; 2025 Moving Medicine. All rights reserved.
+              </p>
+            </div>
+            <div class="col-md-6 text-center text-md-end">
+              <a href="#" class="footer-bottom-link">Privacy Policy</a>
+              <span class="mx-2">|</span>
+              <a href="#" class="footer-bottom-link">Terms of Service</a>
+              <span class="mx-2">|</span>
+              <a href="#" class="footer-bottom-link">Cookie Policy</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Shopping Cart Sidebar -->
+    <div class="cart-sidebar" id="cartSidebar">
+      <div class="cart-header">
+        <h5><i class="bi bi-cart3 me-2"></i>Shopping Cart</h5>
+        <button class="btn-close-cart" id="closeCart">
+          <i class="bi bi-x-lg"></i>
+        </button>
+      </div>
+      <div class="cart-body" id="cartBody">
+        <div class="empty-cart text-center py-5">
+          <i class="bi bi-cart-x" style="font-size: 4rem; color: #ccc"></i>
+          <p class="mt-3 text-muted">Your cart is empty</p>
+        </div>
+      </div>
+      <div class="cart-footer">
+        <div class="cart-total">
+          <span>Total:</span>
+          <span class="total-amount" id="cartTotal">₱0.00</span>
+        </div>
+        <button class="btn btn-main w-100 mb-2" id="checkoutBtn">
+          <i class="bi bi-credit-card me-2"></i>Proceed to Checkout
+        </button>
+        <button class="btn btn-outline-secondary w-100" id="clearCartBtn">
+          <i class="bi bi-trash me-2"></i>Clear Cart
+        </button>
+      </div>
+    </div>
+
+    <!-- Cart Overlay -->
+    <div class="cart-overlay" id="cartOverlay"></div>
+
+    <!-- Login Sidebar -->
+    <div class="login-sidebar" id="loginSidebar">
+      <div class="login-header">
+        <h5><i class="bi bi-person-circle me-2"></i>Login to Your Account</h5>
+        <button class="btn-close-login" id="closeLogin">
+          <i class="bi bi-x-lg"></i>
+        </button>
+      </div>
+      <div class="login-body">
+        <form id="loginForm">
+          <div class="mb-4">
+            <label for="loginEmail" class="form-label">Email Address</label>
+            <div class="input-group">
+              <span class="input-group-text"><i class="bi bi-envelope"></i></span>
+              <input type="email" class="form-control" id="loginEmail" placeholder="Enter your email" required>
+            </div>
+          </div>
+          <div class="mb-4">
+            <label for="loginPassword" class="form-label">Password</label>
+            <div class="input-group">
+              <span class="input-group-text"><i class="bi bi-lock"></i></span>
+              <input type="password" class="form-control" id="loginPassword" placeholder="Enter your password" required>
+            </div>
+          </div>
+          <div class="mb-4 form-check">
+            <input type="checkbox" class="form-check-input" id="rememberMe">
+            <label class="form-check-label" for="rememberMe">Remember me</label>
+          </div>
+          <button type="submit" class="btn btn-main w-100 mb-3">
+            <i class="bi bi-box-arrow-in-right me-2"></i>Login
+          </button>
+          <div class="text-center mb-3">
+            <a href="#" class="text-decoration-none">Forgot Password?</a>
+          </div>
+          <hr>
+          <div class="text-center">
+            <p class="mb-2">Don't have an account?</p>
+            <button type="button" class="btn btn-outline-secondary w-100" id="showSignupBtn">
+              <i class="bi bi-person-plus me-2"></i>Create Account
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Login Overlay -->
+    <div class="login-overlay" id="loginOverlay"></div>
+
+    <!-- Signup Sidebar -->
+    <div class="signup-sidebar" id="signupSidebar">
+      <div class="signup-header">
+        <h5><i class="bi bi-person-plus-fill me-2"></i>Create New Account</h5>
+        <button class="btn-close-signup" id="closeSignup">
+          <i class="bi bi-x-lg"></i>
+        </button>
+      </div>
+      <div class="signup-body">
+        <form id="signupForm">
+          <div class="mb-3">
+            <label for="signupName" class="form-label">Full Name</label>
+            <div class="input-group">
+              <span class="input-group-text"><i class="bi bi-person"></i></span>
+              <input type="text" class="form-control" id="signupName" placeholder="Enter your full name" required>
+            </div>
+          </div>
+          <div class="mb-3">
+            <label for="signupEmail" class="form-label">Email Address</label>
+            <div class="input-group">
+              <span class="input-group-text"><i class="bi bi-envelope"></i></span>
+              <input type="email" class="form-control" id="signupEmail" placeholder="Enter your email" required>
+            </div>
+          </div>
+          <div class="mb-3">
+            <label for="signupPhone" class="form-label">Phone Number</label>
+            <div class="input-group">
+              <span class="input-group-text"><i class="bi bi-telephone"></i></span>
+              <input type="tel" class="form-control" id="signupPhone" placeholder="Enter your phone number" required>
+            </div>
+          </div>
+          <div class="mb-3">
+            <label for="signupPassword" class="form-label">Password</label>
+            <div class="input-group">
+              <span class="input-group-text"><i class="bi bi-lock"></i></span>
+              <input type="password" class="form-control" id="signupPassword" placeholder="Create a password" required>
+            </div>
+          </div>
+          <div class="mb-3">
+            <label for="signupConfirmPassword" class="form-label">Confirm Password</label>
+            <div class="input-group">
+              <span class="input-group-text"><i class="bi bi-lock-fill"></i></span>
+              <input type="password" class="form-control" id="signupConfirmPassword" placeholder="Confirm your password" required>
+            </div>
+          </div>
+          <div class="mb-4 form-check">
+            <input type="checkbox" class="form-check-input" id="agreeTerms" required>
+            <label class="form-check-label" for="agreeTerms">
+              I agree to the <a href="#">Terms & Conditions</a> and <a href="#">Privacy Policy</a>
+            </label>
+          </div>
+          <button type="submit" class="btn btn-main w-100 mb-3">
+            <i class="bi bi-person-check me-2"></i>Create Account
+          </button>
+          <div class="text-center">
+            <p class="mb-0">Already have an account? <a href="#" id="backToLoginBtn">Login here</a></p>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Signup Overlay -->
+    <div class="signup-overlay" id="signupOverlay"></div>
+
+    <!-- Back to Top Button -->
+    <button id="backToTop" class="back-to-top" title="Back to top">
+      <i class="bi bi-arrow-up"></i>
+    </button>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+      // Navbar scroll effect
+      window.addEventListener("scroll", function () {
+        const navbar = document.querySelector(".navbar");
+        if (window.scrollY > 50) {
+          navbar.classList.add("scrolled");
+        } else {
+          navbar.classList.remove("scrolled");
+        }
+      });
+
+      // Search functionality
+      document
+        .getElementById("searchBtn")
+        .addEventListener("click", function () {
+          const searchTerm = document.getElementById("searchInput").value;
+          const category = document.getElementById("categorySelect").value;
+          if (searchTerm.trim()) {
+            console.log("Searching for:", searchTerm, "in category:", category);
+            // Add your search logic here
+            alert(`Searching for "${searchTerm}" in ${category}`);
+          }
+        });
+
+      // Enter key search
+      document
+        .getElementById("searchInput")
+        .addEventListener("keypress", function (e) {
+          if (e.key === "Enter") {
+            document.getElementById("searchBtn").click();
+          }
+        });
+
+      // Smooth scroll for navigation links
+      document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+        anchor.addEventListener("click", function (e) {
+          e.preventDefault();
+          const target = document.querySelector(this.getAttribute("href"));
+          if (target) {
+            target.scrollIntoView({
+              behavior: "smooth",
+              block: "start",
+            });
+          }
+        });
+      });
+
+      // Add to cart functionality
+      document.querySelectorAll(".product-card .btn-main").forEach((button) => {
+        button.addEventListener("click", function () {
+          const productName =
+            this.closest(".product-card").querySelector("h6").textContent;
+          const productPrice =
+            this.closest(".product-card").querySelector(
+              ".text-muted"
+            ).textContent;
+
+          // Add animation
+          this.innerHTML = '<i class="bi bi-check-circle me-2"></i>Added!';
+          this.classList.add("pulse-animation");
+
+          setTimeout(() => {
+            this.innerHTML = "Add to Cart";
+            this.classList.remove("pulse-animation");
+          }, 2000);
+
+          console.log("Added to cart:", productName, productPrice);
+        });
+      });
+
+      // Animate elements on scroll
+      const observerOptions = {
+        threshold: 0.1,
+        rootMargin: "0px 0px -50px 0px",
+      };
+
+      const observer = new IntersectionObserver(function (entries) {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.style.opacity = "1";
+            entry.target.style.transform = "translateY(0)";
+          }
+        });
+      }, observerOptions);
+
+      // Observe all product cards and category icons
+      document.addEventListener("DOMContentLoaded", function () {
+        const animatedElements = document.querySelectorAll(
+          ".product-card, .category-icon, .card"
+        );
+        animatedElements.forEach((el) => {
+          el.style.opacity = "0";
+          el.style.transform = "translateY(20px)";
+          el.style.transition = "opacity 0.6s ease, transform 0.6s ease";
+          observer.observe(el);
+        });
+      });
+
+      // Back to top button
+      const backToTopBtn = document.getElementById("backToTop");
+
+      window.addEventListener("scroll", function () {
+        if (window.scrollY > 300) {
+          backToTopBtn.classList.add("show");
+        } else {
+          backToTopBtn.classList.remove("show");
+        }
+      });
+
+      backToTopBtn.addEventListener("click", function () {
+        window.scrollTo({
+          top: 0,
+          behavior: "smooth",
+        });
+      });
+
+      // Shopping Cart Functionality
+      let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+      // Update cart display
+      function updateCart() {
+        const cartCount = document.getElementById("cartCount");
+        const cartBody = document.getElementById("cartBody");
+        const cartTotal = document.getElementById("cartTotal");
+
+        // Update cart count badge
+        cartCount.textContent = cart.length;
+        cartCount.style.display = cart.length > 0 ? "inline-block" : "none";
+
+        // Calculate total
+        const total = cart.reduce((sum, item) => sum + item.price, 0);
+        cartTotal.textContent = `₱${total.toFixed(2)}`;
+
+        // Update cart body
+        if (cart.length === 0) {
+          cartBody.innerHTML = `
+        <div class="empty-cart text-center py-5">
+          <i class="bi bi-cart-x" style="font-size: 4rem; color: #ccc;"></i>
+          <p class="mt-3 text-muted">Your cart is empty</p>
+        </div>
+      `;
+        } else {
+          cartBody.innerHTML = cart
+            .map(
+              (item, index) => `
+        <div class="cart-item">
+          <img src="${item.image}" alt="${item.name}">
+          <div class="cart-item-details">
+            <h6>${item.name}</h6>
+            <p class="text-muted mb-0">₱${item.price.toFixed(2)}</p>
+          </div>
+          <button class="btn-remove-item" onclick="removeFromCart(${index})">
+            <i class="bi bi-trash"></i>
+          </button>
+        </div>
+      `
+            )
+            .join("");
+        }
+
+        // Save to localStorage
+        localStorage.setItem("cart", JSON.stringify(cart));
+      }
+
+      // Add to cart
+      window.addToCart = function (name, price, image) {
+        cart.push({ name, price, image });
+        updateCart();
+
+        // Show notification
+        showNotification("Item added to cart!");
+      };
+
+      // Remove from cart
+      window.removeFromCart = function (index) {
+        cart.splice(index, 1);
+        updateCart();
+        showNotification("Item removed from cart");
+      };
+
+      // Clear cart
+      document
+        .getElementById("clearCartBtn")
+        .addEventListener("click", function () {
+          if (
+            cart.length > 0 &&
+            confirm("Are you sure you want to clear your cart?")
+          ) {
+            cart = [];
+            updateCart();
+            showNotification("Cart cleared");
+          }
+        });
+
+      // Checkout
+      document
+        .getElementById("checkoutBtn")
+        .addEventListener("click", function () {
+          if (cart.length > 0) {
+            alert(
+              "Proceeding to checkout...\n\nTotal: ₱" +
+                cart.reduce((sum, item) => sum + item.price, 0).toFixed(2)
+            );
+            // Add your checkout logic here
+          } else {
+            alert("Your cart is empty!");
+          }
+        });
+
+      // Toggle cart sidebar
+      const cartSidebar = document.getElementById("cartSidebar");
+      const cartOverlay = document.getElementById("cartOverlay");
+      const cartBtn = document.getElementById("cartBtn");
+      const closeCart = document.getElementById("closeCart");
+
+      function openCart() {
+        cartSidebar.classList.add("active");
+        cartOverlay.classList.add("active");
+        document.body.style.overflow = "hidden";
+      }
+
+      function closeCartSidebar() {
+        cartSidebar.classList.remove("active");
+        cartOverlay.classList.remove("active");
+        document.body.style.overflow = "";
+      }
+
+      cartBtn.addEventListener("click", openCart);
+      closeCart.addEventListener("click", closeCartSidebar);
+      cartOverlay.addEventListener("click", closeCartSidebar);
+
+      // Show notification
+      function showNotification(message) {
+        const notification = document.createElement("div");
+        notification.className = "cart-notification";
+        notification.innerHTML = `
+      <i class="bi bi-check-circle me-2"></i>${message}
+    `;
+        document.body.appendChild(notification);
+
+        setTimeout(() => {
+          notification.classList.add("show");
+        }, 10);
+
+        setTimeout(() => {
+          notification.classList.remove("show");
+          setTimeout(() => notification.remove(), 300);
+        }, 2000);
+      }
+
+      // Update add to cart buttons
+      document.querySelectorAll(".product-card .btn-main").forEach((button) => {
+        button.addEventListener("click", function () {
+          const productCard = this.closest(".product-card");
+          const productName = productCard.querySelector("h6").textContent;
+          const productPriceText =
+            productCard.querySelector(".text-muted").textContent;
+          const productPrice = parseFloat(productPriceText.replace("₱", ""));
+          const productImage = productCard.querySelector("img").src;
+
+          // Add to cart
+          addToCart(productName, productPrice, productImage);
+
+          // Visual feedback
+          this.innerHTML = '<i class="bi bi-check-circle me-2"></i>Added!';
+          this.classList.add("pulse-animation");
+
+          setTimeout(() => {
+            this.innerHTML = "Add to Cart";
+            this.classList.remove("pulse-animation");
+          }, 2000);
+        });
+      });
+
+      // Initialize cart on page load
+      updateCart();
+
+      // Login Sidebar Functionality
+      const loginSidebar = document.getElementById("loginSidebar");
+      const loginOverlay = document.getElementById("loginOverlay");
+      const loginBtn = document.getElementById("loginBtn");
+      const closeLogin = document.getElementById("closeLogin");
+
+      function openLogin() {
+        loginSidebar.classList.add("active");
+        loginOverlay.classList.add("active");
+        document.body.style.overflow = "hidden";
+      }
+
+      function closeLoginSidebar() {
+        loginSidebar.classList.remove("active");
+        loginOverlay.classList.remove("active");
+        document.body.style.overflow = "";
+      }
+
+      loginBtn.addEventListener("click", openLogin);
+      closeLogin.addEventListener("click", closeLoginSidebar);
+      loginOverlay.addEventListener("click", closeLoginSidebar);
+
+      // Login form submission
+      document.getElementById("loginForm").addEventListener("submit", function(e) {
+        e.preventDefault();
+        const email = document.getElementById("loginEmail").value;
+        const password = document.getElementById("loginPassword").value;
+        
+        // Add your login logic here
+        console.log("Login attempt:", email);
+        alert("Login functionality would be implemented here.\nEmail: " + email);
+        
+        // Close the login sidebar after submission
+        closeLoginSidebar();
+      });
+
+      // Signup Sidebar Functionality
+      const signupSidebar = document.getElementById("signupSidebar");
+      const signupOverlay = document.getElementById("signupOverlay");
+      const showSignupBtn = document.getElementById("showSignupBtn");
+      const closeSignup = document.getElementById("closeSignup");
+      const backToLoginBtn = document.getElementById("backToLoginBtn");
+
+      function openSignup() {
+        // Close login first
+        closeLoginSidebar();
+        
+        // Small delay before opening signup for smooth transition
+        setTimeout(() => {
+          signupSidebar.classList.add("active");
+          signupOverlay.classList.add("active");
+          document.body.style.overflow = "hidden";
+        }, 100);
+      }
+
+      function closeSignupSidebar() {
+        signupSidebar.classList.remove("active");
+        signupOverlay.classList.remove("active");
+        document.body.style.overflow = "";
+      }
+
+      showSignupBtn.addEventListener("click", openSignup);
+      closeSignup.addEventListener("click", closeSignupSidebar);
+      signupOverlay.addEventListener("click", closeSignupSidebar);
+
+      // Back to login from signup
+      backToLoginBtn.addEventListener("click", function(e) {
+        e.preventDefault();
+        closeSignupSidebar();
+        setTimeout(() => {
+          openLogin();
+        }, 100);
+      });
+
+      // Signup form submission
+      document.getElementById("signupForm").addEventListener("submit", function(e) {
+        e.preventDefault();
+        const name = document.getElementById("signupName").value;
+        const email = document.getElementById("signupEmail").value;
+        const phone = document.getElementById("signupPhone").value;
+        const password = document.getElementById("signupPassword").value;
+        const confirmPassword = document.getElementById("signupConfirmPassword").value;
+        
+        // Validate passwords match
+        if (password !== confirmPassword) {
+          alert("Passwords do not match!");
+          return;
+        }
+        
+        // Add your signup logic here
+        console.log("Signup attempt:", { name, email, phone });
+        alert("Account creation functionality would be implemented here.\nName: " + name + "\nEmail: " + email);
+        
+        // Close the signup sidebar after submission
+        closeSignupSidebar();
+      });
+    </script>
+  </body>
+</html>
