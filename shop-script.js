@@ -1,7 +1,24 @@
-// Products data now loaded from products-data.js
+// Get products from localStorage or fall back to products-data.js
+function getProductsData() {
+    const storedProducts = localStorage.getItem('products');
+    if (storedProducts) {
+        return JSON.parse(storedProducts);
+    }
+    // Fallback to hard-coded data and initialize localStorage
+    if (typeof productsData !== 'undefined') {
+        const productsWithStock = productsData.map(product => ({
+            ...product,
+            stock: product.stock || 100,
+            featured: product.featured || false
+        }));
+        localStorage.setItem('products', JSON.stringify(productsWithStock));
+        return productsWithStock;
+    }
+    return [];
+}
 
-// Cart Array
-let cart = JSON.parse(localStorage.getItem('cart')) || [];
+// Cart Array - User-specific cart
+let cart = CartUtils.getCart();
 
 // Current filter
 let currentFilter = 'all';
@@ -9,7 +26,8 @@ let currentFilter = 'all';
 // Initialize when DOM is loaded
 document.addEventListener('DOMContentLoaded', function() {
     checkLoginStatus();
-    displayProducts(productsData);
+    const products = getProductsData();
+    displayProducts(products);
     updateCartCount();
     setupEventListeners();
 });
@@ -87,11 +105,68 @@ function setupEventListeners() {
     closeLogin.addEventListener('click', closeLoginSidebar);
     loginOverlay.addEventListener('click', closeLoginSidebar);
 
-    // Login form
+    // Login form - Full user authentication
     document.getElementById('loginForm').addEventListener('submit', function(e) {
         e.preventDefault();
-        alert('Login functionality would be implemented here.');
-        closeLoginSidebar();
+        const email = document.getElementById('loginEmail').value.trim();
+        const password = document.getElementById('loginPassword').value.trim();
+        const submitBtn = this.querySelector('button[type="submit"]');
+        
+        // Admin credentials
+        const ADMIN_EMAIL = 'admin@gmail.com';
+        const ADMIN_PASSWORD = 'admin123';
+
+        // Check if admin login
+        if (email === ADMIN_EMAIL && password === ADMIN_PASSWORD) {
+            submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Logging in...';
+            submitBtn.disabled = true;
+
+            setTimeout(() => {
+                CartUtils.migrateGuestCart(email);
+                localStorage.setItem('isAdminLoggedIn', 'true');
+                localStorage.setItem('adminEmail', email);
+                
+                submitBtn.innerHTML = '<i class="bi bi-check-circle me-2"></i>Success!';
+                submitBtn.classList.add('btn-success');
+                
+                setTimeout(() => {
+                    window.location.href = 'admin-dashboard.html';
+                }, 500);
+            }, 1000);
+        } else {
+            // Check regular user credentials
+            const users = JSON.parse(localStorage.getItem('users')) || [];
+            const user = users.find(u => u.email === email);
+            
+            if (user && btoa(password) === user.password) {
+                // User login successful
+                submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Logging in...';
+                submitBtn.disabled = true;
+
+                setTimeout(() => {
+                    CartUtils.migrateGuestCart(email);
+                    localStorage.setItem('isUserLoggedIn', 'true');
+                    localStorage.setItem('userEmail', email);
+                    localStorage.setItem('userName', user.name);
+                    
+                    submitBtn.innerHTML = '<i class="bi bi-check-circle me-2"></i>Success!';
+                    submitBtn.classList.add('btn-success');
+                    
+                    setTimeout(() => {
+                        closeLoginSidebar();
+                        checkLoginStatus();
+                        showNotification('Welcome back, ' + user.name + '!');
+                        // Reload page to update cart
+                        window.location.reload();
+                    }, 500);
+                }, 1000);
+            } else {
+                // Invalid credentials
+                showNotification('Invalid email or password');
+                submitBtn.classList.add('shake-animation');
+                setTimeout(() => submitBtn.classList.remove('shake-animation'), 500);
+            }
+        }
     });
 
     // Logout from profile dropdown
@@ -105,6 +180,7 @@ function setupEventListeners() {
                 localStorage.removeItem('adminEmail');
                 localStorage.removeItem('userEmail');
                 localStorage.removeItem('userName');
+                // Cart will automatically switch to guest cart on reload
                 window.location.reload();
             }
         });
@@ -174,7 +250,7 @@ function createProductCard(product) {
                 <h5 class="product-title">${product.name}</h5>
                 <p class="product-description">${product.description}</p>
                 <div class="product-footer">
-                    <div class="product-price">$${product.price.toFixed(2)}</div>
+                    <div class="product-price">₱${product.price.toFixed(2)}</div>
                     <div class="product-actions">
                         <button class="btn-view-details" onclick="viewProduct(${product.id})" title="View Details">
                             <i class="bi bi-eye"></i>
@@ -201,15 +277,18 @@ function filterByCategory(category) {
     });
     event.target.closest('.category-btn').classList.add('active');
 
+    // Get products from localStorage
+    const products = getProductsData();
+    
     // Filter products
-    let filteredProducts = category === 'all' 
-        ? productsData 
-        : productsData.filter(p => p.category === category);
+    let filteredProducts = category === 'all'
+        ? products
+        : products.filter(p => p.category === category);
 
     // Apply search if there's a search term
     const searchTerm = document.getElementById('searchInput').value;
     if (searchTerm) {
-        filteredProducts = filteredProducts.filter(p => 
+        filteredProducts = filteredProducts.filter(p =>
             p.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
             p.description.toLowerCase().includes(searchTerm.toLowerCase())
         );
@@ -221,10 +300,11 @@ function filterByCategory(category) {
 // Handle Search
 function handleSearch() {
     const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+    const products = getProductsData();
     
     let filteredProducts = currentFilter === 'all'
-        ? productsData
-        : productsData.filter(p => p.category === currentFilter);
+        ? products
+        : products.filter(p => p.category === currentFilter);
 
     if (searchTerm) {
         filteredProducts = filteredProducts.filter(p =>
@@ -238,7 +318,8 @@ function handleSearch() {
 
 // View Product Details
 function viewProduct(productId) {
-    const product = productsData.find(p => p.id === productId);
+    const products = getProductsData();
+    const product = products.find(p => p.id === productId);
     if (!product) return;
 
     document.getElementById('modalProductName').textContent = product.name;
@@ -269,7 +350,8 @@ function decreaseQuantity() {
 
 // Add to Cart
 function addToCart(productId) {
-    const product = productsData.find(p => p.id === productId);
+    const products = getProductsData();
+    const product = products.find(p => p.id === productId);
     if (!product) return;
 
     const existingItem = cart.find(item => item.id === productId);
@@ -283,7 +365,7 @@ function addToCart(productId) {
         });
     }
 
-    saveCart();
+    CartUtils.saveCart(cart);
     updateCartCount();
     showNotification('Product added to cart!');
 }
@@ -293,7 +375,8 @@ function addToCartFromModal() {
     const productId = parseInt(document.getElementById('modalQuantity').dataset.productId);
     const quantity = parseInt(document.getElementById('modalQuantity').value);
     
-    const product = productsData.find(p => p.id === productId);
+    const products = getProductsData();
+    const product = products.find(p => p.id === productId);
     if (!product) return;
 
     const existingItem = cart.find(item => item.id === productId);
@@ -307,7 +390,7 @@ function addToCartFromModal() {
         });
     }
 
-    saveCart();
+    CartUtils.saveCart(cart);
     updateCartCount();
     showNotification(`Added ${quantity} item(s) to cart!`);
 
@@ -330,6 +413,7 @@ function closeCartSidebar() {
 }
 
 function updateCartDisplay() {
+    cart = CartUtils.getCart(); // Reload user-specific cart
     const cartBody = document.getElementById('cartBody');
     const cartTotal = document.getElementById('cartTotal');
 
@@ -349,7 +433,7 @@ function updateCartDisplay() {
                     <img src="${item.image}" alt="${item.name}" class="cart-item-image">
                     <div class="cart-item-details">
                         <h6>${item.name}</h6>
-                        <p class="cart-item-price mb-1">$${item.price.toFixed(2)} x ${item.quantity}</p>
+                        <p class="cart-item-price mb-1">₱${item.price.toFixed(2)} x ${item.quantity}</p>
                         <div class="d-flex align-items-center gap-2 mt-2">
                             <button class="btn btn-sm btn-outline-secondary" onclick="updateCartQuantity(${item.id}, -1)">-</button>
                             <span class="fw-bold">${item.quantity}</span>
@@ -357,7 +441,7 @@ function updateCartDisplay() {
                         </div>
                     </div>
                     <div class="text-end">
-                        <div class="cart-item-price fw-bold">$${itemTotal.toFixed(2)}</div>
+                        <div class="cart-item-price fw-bold">₱${itemTotal.toFixed(2)}</div>
                         <button class="btn-remove-cart mt-2" onclick="removeFromCart(${item.id})">
                             <i class="bi bi-trash"></i>
                         </button>
@@ -367,7 +451,7 @@ function updateCartDisplay() {
             cartBody.insertAdjacentHTML('beforeend', cartItemHTML);
         });
 
-        cartTotal.textContent = '$' + total.toFixed(2);
+        cartTotal.textContent = '₱' + total.toFixed(2);
     }
 }
 
@@ -380,7 +464,7 @@ function updateCartQuantity(productId, change) {
     if (item.quantity <= 0) {
         removeFromCart(productId);
     } else {
-        saveCart();
+        CartUtils.saveCart(cart);
         updateCartDisplay();
         updateCartCount();
     }
@@ -388,7 +472,7 @@ function updateCartQuantity(productId, change) {
 
 function removeFromCart(productId) {
     cart = cart.filter(item => item.id !== productId);
-    saveCart();
+    CartUtils.saveCart(cart);
     updateCartDisplay();
     updateCartCount();
     showNotification('Item removed from cart');
@@ -396,8 +480,8 @@ function removeFromCart(productId) {
 
 function clearCart() {
     if (cart.length > 0 && confirm('Are you sure you want to clear your cart?')) {
+        CartUtils.clearCart();
         cart = [];
-        saveCart();
         updateCartDisplay();
         updateCartCount();
         showNotification('Cart cleared');
@@ -410,12 +494,120 @@ function checkout() {
         return;
     }
 
-    const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-    alert(`Proceeding to checkout...\n\nTotal: $${total.toFixed(2)}`);
-    // Add your checkout logic here
+    // Check if user is logged in
+    const isAdminLoggedIn = localStorage.getItem('isAdminLoggedIn');
+    const isUserLoggedIn = localStorage.getItem('isUserLoggedIn');
+    
+    if (!isAdminLoggedIn && !isUserLoggedIn) {
+        // User not logged in - show login required message
+        if (confirm("You need to login to proceed to checkout.\n\nWould you like to login now?")) {
+            closeCartSidebar();
+            setTimeout(() => {
+                openLogin();
+            }, 300);
+        }
+        return;
+    }
+
+    // User is logged in - show checkout modal
+    closeCartSidebar();
+    showCheckoutModal();
+}
+
+// Show Checkout Modal
+function showCheckoutModal() {
+    const checkoutItemsList = document.getElementById('checkoutItemsList');
+    const checkoutTotal = document.getElementById('checkoutTotal');
+    
+    // Populate items list
+    let total = 0;
+    checkoutItemsList.innerHTML = cart.map(item => {
+        const itemTotal = item.price * item.quantity;
+        total += itemTotal;
+        return `
+            <tr>
+                <td>${item.name}</td>
+                <td>₱${item.price.toFixed(2)}</td>
+                <td>${item.quantity}</td>
+                <td>₱${itemTotal.toFixed(2)}</td>
+            </tr>
+        `;
+    }).join('');
+    
+    checkoutTotal.textContent = `₱${total.toFixed(2)}`;
+    
+    // Pre-fill customer information
+    const userName = localStorage.getItem('userName') || '';
+    const userEmail = localStorage.getItem('userEmail') || localStorage.getItem('adminEmail') || '';
+    
+    document.getElementById('customerName').value = userName || 'Admin';
+    document.getElementById('customerEmail').value = userEmail;
+    document.getElementById('customerPhone').value = '';
+    document.getElementById('deliveryAddress').value = '';
+    document.getElementById('paymentMethod').value = '';
+    document.getElementById('orderNotes').value = '';
+    
+    // Show modal
+    const modal = new bootstrap.Modal(document.getElementById('checkoutModal'));
+    modal.show();
+}
+
+// Confirm Order - Save to localStorage
+function confirmOrder() {
+    const form = document.getElementById('checkoutForm');
+    
+    if (!form.checkValidity()) {
+        form.reportValidity();
+        return;
+    }
+    
+    // Create order object
+    const order = {
+        id: 'ORD-' + Date.now(),
+        customerName: document.getElementById('customerName').value,
+        customerEmail: document.getElementById('customerEmail').value,
+        customerPhone: document.getElementById('customerPhone').value,
+        deliveryAddress: document.getElementById('deliveryAddress').value,
+        paymentMethod: document.getElementById('paymentMethod').value,
+        orderNotes: document.getElementById('orderNotes').value,
+        items: cart.map(item => ({
+            productId: item.id,
+            productName: item.name,
+            price: item.price,
+            quantity: item.quantity,
+            subtotal: item.price * item.quantity
+        })),
+        total: cart.reduce((sum, item) => sum + (item.price * item.quantity), 0),
+        status: 'Pending',
+        orderDate: new Date().toISOString(),
+        updatedAt: new Date().toISOString()
+    };
+    
+    // Save order to localStorage
+    let orders = JSON.parse(localStorage.getItem('orders')) || [];
+    orders.push(order);
+    localStorage.setItem('orders', JSON.stringify(orders));
+    
+    // Clear cart (user-specific)
+    CartUtils.clearCart();
+    cart = [];
+    updateCartCount();
+    
+    // Close modal
+    const modal = bootstrap.Modal.getInstance(document.getElementById('checkoutModal'));
+    modal.hide();
+    
+    // Show success message
+    showNotification('Order placed successfully! Order ID: ' + order.id);
+    
+    // Optional: Show confirmation
+    setTimeout(() => {
+        alert(`Thank you for your order!\n\nOrder ID: ${order.id}\nTotal: ₱${order.total.toFixed(2)}\n\nYou will receive a confirmation email shortly.`);
+    }, 500);
 }
 
 function updateCartCount() {
+    cart = CartUtils.getCart(); // Reload cart
     const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
     const cartCount = document.getElementById('cartCount');
     cartCount.textContent = totalItems;
@@ -423,7 +615,7 @@ function updateCartCount() {
 }
 
 function saveCart() {
-    localStorage.setItem('cart', JSON.stringify(cart));
+    CartUtils.saveCart(cart);
 }
 
 // Login Functions
@@ -474,6 +666,7 @@ function showNotification(message) {
 }
 
 // Console helper
+const products = getProductsData();
 console.log('%cMoving Medicine Shop', 'color: #00bfa6; font-size: 20px; font-weight: bold;');
-console.log('%cTotal Products:', 'color: #01957e; font-size: 14px;', productsData.length);
-console.log('Categories:', [...new Set(productsData.map(p => p.category))].join(', '));
+console.log('%cTotal Products:', 'color: #01957e; font-size: 14px;', products.length);
+console.log('Categories:', [...new Set(products.map(p => p.category))].join(', '));

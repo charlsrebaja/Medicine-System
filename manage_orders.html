@@ -61,7 +61,7 @@
                     <div class="card stat-card stat-card-primary text-white">
                         <div class="card-body">
                             <h6 class="text-uppercase mb-1">Total Orders</h6>
-                            <h2 class="mb-0" id="totalOrders">0</h2>
+                            <h2 class="mb-0" id="totalOrdersCount">0</h2>
                         </div>
                     </div>
                 </div>
@@ -85,7 +85,33 @@
                     <div class="card stat-card stat-card-info text-white">
                         <div class="card-body">
                             <h6 class="text-uppercase mb-1">Revenue</h6>
-                            <h2 class="mb-0">$<span id="totalRevenue">0</span></h2>
+                            <h2 class="mb-0">₱<span id="ordersRevenue">0</span></h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Search and Filter -->
+            <div class="card mb-4">
+                <div class="card-body">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <input type="text" class="form-control" id="searchInput" placeholder="Search by Order ID, Customer Name, or Email...">
+                        </div>
+                        <div class="col-md-3">
+                            <select class="form-select" id="statusFilter">
+                                <option value="">All Status</option>
+                                <option value="Pending">Pending</option>
+                                <option value="Processing">Processing</option>
+                                <option value="Shipped">Shipped</option>
+                                <option value="Completed">Completed</option>
+                                <option value="Cancelled">Cancelled</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <button class="btn btn-secondary w-100" onclick="clearFilters()">
+                                <i class="bi bi-x-circle"></i> Clear Filters
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -110,10 +136,85 @@
                                 </tr>
                             </thead>
                             <tbody id="ordersTableBody">
-                                <tr><td colspan="7" class="text-center py-5"><i class="bi bi-cart-x fs-1 text-muted"></i><p class="text-muted mt-2">No orders yet</p></td></tr>
+                                <!-- Orders will be dynamically inserted here -->
                             </tbody>
                         </table>
                     </div>
+                    <div id="noOrdersMessage" class="text-center py-4 d-none">
+                        <i class="bi bi-inbox fs-1 text-muted"></i>
+                        <p class="text-muted mt-2">No orders found</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- View Order Modal -->
+    <div class="modal fade" id="viewOrderModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Order Details - <span id="viewOrderId"></span></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <strong>Customer:</strong> <span id="viewCustomerName"></span><br>
+                            <strong>Email:</strong> <span id="viewCustomerEmail"></span><br>
+                            <strong>Phone:</strong> <span id="viewCustomerPhone"></span>
+                        </div>
+                        <div class="col-md-6">
+                            <strong>Order Date:</strong> <span id="viewOrderDate"></span><br>
+                            <strong>Status:</strong> <span id="viewOrderStatus"></span><br>
+                            <strong>Payment:</strong> <span id="viewPaymentMethod"></span>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <strong>Delivery Address:</strong><br>
+                        <span id="viewDeliveryAddress"></span>
+                    </div>
+                    <div class="mb-3">
+                        <strong>Order Notes:</strong><br>
+                        <span id="viewOrderNotes"></span>
+                    </div>
+                    <h6>Order Items:</h6>
+                    <table class="table table-sm">
+                        <thead>
+                            <tr>
+                                <th>Product</th>
+                                <th>Price</th>
+                                <th>Quantity</th>
+                                <th>Subtotal</th>
+                            </tr>
+                        </thead>
+                        <tbody id="viewOrderItems"></tbody>
+                    </table>
+                    <div class="text-end">
+                        <h5>Total: <span class="text-primary" id="viewOrderTotal"></span></h5>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Order Modal -->
+    <div class="modal fade" id="deleteOrderModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-danger text-white">
+                    <h5 class="modal-title">Confirm Delete</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure you want to delete this order? This action cannot be undone.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-danger" onclick="confirmDeleteOrder()">Delete Order</button>
                 </div>
             </div>
         </div>
@@ -121,5 +222,6 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="admin-script.js"></script>
+    <script src="manage-orders-script.js"></script>
 </body>
 </html>

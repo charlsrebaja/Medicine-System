@@ -1,3 +1,17 @@
+// Initialize products from products-data.js if localStorage is empty
+function initializeProducts() {
+    const existingProducts = localStorage.getItem('products');
+    if (!existingProducts && typeof productsData !== 'undefined') {
+        const productsWithStock = productsData.map(product => ({
+            ...product,
+            stock: product.stock || 100,
+            featured: product.featured || false
+        }));
+        localStorage.setItem('products', JSON.stringify(productsWithStock));
+        console.log('Products initialized in localStorage');
+    }
+}
+
 // Initialize data from localStorage or create empty arrays
 let products = JSON.parse(localStorage.getItem('products')) || [];
 let deleteProductId = null;
@@ -5,6 +19,8 @@ let deleteProductId = null;
 // Initialize the dashboard when DOM is loaded
 document.addEventListener('DOMContentLoaded', function() {
     checkAuth();
+    initializeProducts();
+    products = JSON.parse(localStorage.getItem('products')) || [];
     initializeDashboard();
     setupEventListeners();
 });
@@ -38,7 +54,10 @@ function logout() {
 // Initialize dashboard
 function initializeDashboard() {
     loadProducts();
-    updateStats();
+    // Only update stats if elements exist (on dashboard page)
+    if (document.getElementById('totalProducts')) {
+        updateStats();
+    }
 }
 
 // Setup event listeners
@@ -106,23 +125,30 @@ function createProductRow(product) {
     if (product.stock === 0) {
         stockBadge = '<span class="badge bg-danger">Out of Stock</span>';
     } else if (product.stock < 10) {
-        stockBadge = `<span class="badge bg-warning text-dark">${product.stock}</span>`;
+        stockBadge = `<span class="badge bg-warning text-dark">${product.stock} units</span>`;
     } else {
-        stockBadge = `<span class="badge bg-success">${product.stock}</span>`;
+        stockBadge = `<span class="badge bg-success">${product.stock} units</span>`;
     }
     
     tr.innerHTML = `
         <td>${product.id}</td>
-        <td><strong>${product.name}</strong></td>
-        <td><span class="badge bg-info text-dark">${product.category}</span></td>
-        <td class="price-tag">$${parseFloat(product.price).toFixed(2)}</td>
+        <td>
+            <div class="d-flex align-items-center">
+                <img src="${product.image || 'https://via.placeholder.com/50'}" alt="${product.name}"
+                     style="width: 50px; height: 50px; object-fit: cover; border-radius: 8px; margin-right: 10px;"
+                     onerror="this.src='https://via.placeholder.com/50'">
+                <strong>${product.name}</strong>
+            </div>
+        </td>
+        <td><span class="badge bg-primary">${product.category}</span></td>
+        <td class="price-tag">₱${parseFloat(product.price).toFixed(2)}</td>
         <td>${stockBadge}</td>
-        <td>${product.description || 'N/A'}</td>
+        <td>${product.description ? product.description.substring(0, 50) + '...' : 'No description'}</td>
         <td class="action-buttons">
-            <button class="btn btn-sm btn-primary btn-action" onclick="editProduct(${product.id})" title="Edit">
-                <i class="bi bi-pencil-square"></i>
+            <button class="btn btn-sm btn-outline-primary me-1" onclick="editProduct(${product.id})" title="Edit">
+                <i class="bi bi-pencil"></i>
             </button>
-            <button class="btn btn-sm btn-danger btn-action" onclick="deleteProduct(${product.id})" title="Delete">
+            <button class="btn btn-sm btn-outline-danger" onclick="deleteProduct(${product.id})" title="Delete">
                 <i class="bi bi-trash"></i>
             </button>
         </td>
@@ -142,13 +168,18 @@ function saveProduct() {
     }
     
     const productId = document.getElementById('productId').value;
+    const productName = document.getElementById('productName').value.trim();
+    const imageUrl = document.getElementById('productImage').value.trim();
+    
     const productData = {
         id: productId ? parseInt(productId) : Date.now(),
-        name: document.getElementById('productName').value.trim(),
+        name: productName,
         category: document.getElementById('productCategory').value,
         price: parseFloat(document.getElementById('productPrice').value),
         stock: parseInt(document.getElementById('productStock').value),
         description: document.getElementById('productDescription').value.trim(),
+        image: imageUrl || `https://via.placeholder.com/300x300/072b4e/ffffff?text=${encodeURIComponent(productName)}`,
+        featured: document.getElementById('productFeatured').checked,
         createdAt: productId ? getProductById(parseInt(productId)).createdAt : new Date().toISOString(),
         updatedAt: new Date().toISOString()
     };
@@ -195,6 +226,8 @@ function editProduct(id) {
     document.getElementById('productPrice').value = product.price;
     document.getElementById('productStock').value = product.stock;
     document.getElementById('productDescription').value = product.description || '';
+    document.getElementById('productImage').value = product.image || '';
+    document.getElementById('productFeatured').checked = product.featured || false;
     
     // Show modal
     const modal = new bootstrap.Modal(document.getElementById('productModal'));
@@ -292,20 +325,49 @@ function clearFilters() {
 
 // Update statistics
 function updateStats() {
-    // Total products
-    document.getElementById('totalProducts').textContent = products.length;
+    // Check if stats elements exist (they're only on dashboard page)
+    const totalProductsEl = document.getElementById('totalProducts');
+    const totalUsersEl = document.getElementById('totalUsers');
+    const totalOrdersEl = document.getElementById('totalOrders');
+    const totalRevenueEl = document.getElementById('totalRevenue');
     
-    // Total users (simulated)
-    document.getElementById('totalUsers').textContent = Math.floor(Math.random() * 100) + 50;
+    // Total Products - Real data
+    if (totalProductsEl) {
+        totalProductsEl.textContent = products.length;
+    }
     
-    // Total orders (simulated)
-    document.getElementById('totalOrders').textContent = Math.floor(Math.random() * 500) + 100;
+    // Total Users - Real data from localStorage
+    if (totalUsersEl) {
+        const users = JSON.parse(localStorage.getItem('users')) || [];
+        totalUsersEl.textContent = users.length;
+    }
     
-    // Total revenue (calculate from products)
-    const totalRevenue = products.reduce((sum, product) => {
-        return sum + (product.price * product.stock);
-    }, 0);
-    document.getElementById('totalRevenue').textContent = totalRevenue.toFixed(2);
+    // Total Orders - Real data from localStorage
+    if (totalOrdersEl) {
+        const orders = JSON.parse(localStorage.getItem('orders')) || [];
+        totalOrdersEl.textContent = orders.length;
+    }
+    
+    // Total Revenue - Real data from orders
+    if (totalRevenueEl) {
+        const orders = JSON.parse(localStorage.getItem('orders')) || [];
+        const totalRevenue = orders.reduce((sum, order) => {
+            return sum + (order.total || 0);
+        }, 0);
+        totalRevenueEl.textContent = totalRevenue.toFixed(2);
+    }
+    
+    // Update manage products stats if they exist
+    const inStockEl = document.getElementById('inStockProducts');
+    const lowStockEl = document.getElementById('lowStockProducts');
+    
+    if (inStockEl) {
+        inStockEl.textContent = products.filter(p => p.stock > 10).length;
+    }
+    
+    if (lowStockEl) {
+        lowStockEl.textContent = products.filter(p => p.stock <= 10 && p.stock > 0).length;
+    }
 }
 
 // Show notification
