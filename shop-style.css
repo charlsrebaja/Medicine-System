@@ -1213,20 +1213,79 @@ body {
 }
 
 /* ===========================
-   Responsive Design
+   Responsive Design - Enhanced for All Devices
    =========================== */
-@media (max-width: 992px) {
-  .category-filter {
-    flex-direction: column;
-    align-items: stretch;
+
+/* Large Desktop (1200px+) - Already optimized in default styles */
+
+/* Tablet Landscape (992px - 1199px) */
+@media (max-width: 1199px) {
+  .container {
+    max-width: 960px;
   }
-  
+
+  .hero-title {
+    font-size: 2.5rem;
+  }
+
+  .product-title {
+    font-size: 1rem;
+    min-height: 45px;
+  }
+
+  .navbar .btn-main {
+    padding: 6px 20px;
+    font-size: 0.95rem;
+  }
+
   .category-btn {
-    width: 100%;
-    justify-content: center;
+    padding: 0.9rem 1.75rem;
   }
 }
 
+/* Tablet Portrait (768px - 991px) */
+@media (max-width: 991px) {
+  .container {
+    max-width: 720px;
+  }
+
+  .hero-title {
+    font-size: 2.25rem;
+  }
+
+  .hero-slide {
+    min-height: 450px;
+    padding: 70px 0;
+  }
+
+  .category-filter {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+
+  .category-btn {
+    flex: 1 1 calc(50% - 0.75rem);
+    min-width: 200px;
+    justify-content: center;
+    padding: 0.85rem 1.5rem;
+    font-size: 0.95rem;
+  }
+
+  .product-actions {
+    flex-direction: row;
+    gap: 0.5rem;
+  }
+
+  .btn-view-details,
+  .btn-add-cart {
+    width: 38px;
+    height: 38px;
+    font-size: 1.1rem;
+  }
+}
+
+/* Mobile Landscape & Small Tablets (768px - 991px) */
 @media (max-width: 768px) {
   .hero-slide {
     min-height: 400px;
@@ -1236,6 +1295,7 @@ body {
 
   .hero-title {
     font-size: 2rem;
+    margin-bottom: 1rem;
   }
 
   .hero-description {
@@ -1246,12 +1306,29 @@ body {
     display: block;
     width: 100%;
     margin: 0 0 10px 0 !important;
+    min-height: 44px;
   }
 
+  /* Touch-friendly buttons - minimum 44x44px */
+  .btn-main,
+  .btn-outline-primary,
+  .btn-outline-light {
+    min-height: 44px;
+    padding: 12px 24px;
+  }
+
+  .btn-view-details,
+  .btn-add-cart {
+    width: 44px;
+    height: 44px;
+    font-size: 1.2rem;
+  }
+
+  /* Carousel controls - touch friendly */
   .carousel-control-prev,
   .carousel-control-next {
-    width: 45px;
-    height: 45px;
+    width: 50px;
+    height: 50px;
   }
 
   .carousel-control-prev {
@@ -1266,19 +1343,58 @@ body {
     font-size: 1.5rem;
   }
 
+  /* Search section responsive */
   .search-section {
     margin-top: -20px;
   }
 
-  .search-bar-wrapper .btn-main {
-    padding: 16px 25px;
+  .search-bar-wrapper {
+    flex-direction: column;
+    border-radius: 15px !important;
   }
 
+  .search-input {
+    border-radius: 15px !important;
+    width: 100%;
+    padding: 16px 20px;
+    font-size: 16px; /* Prevents zoom on iOS */
+  }
+
+  .search-bar-wrapper .btn-main {
+    border-radius: 15px !important;
+    padding: 16px 25px;
+    width: 100%;
+    margin-top: 0.5rem;
+  }
+
+  /* Category buttons - responsive layout */
   .category-btn {
     padding: 0.75rem 1.5rem;
     font-size: 0.95rem;
+    min-height: 44px;
   }
 
+  /* Navigation improvements */
+  .navbar-collapse {
+    background: linear-gradient(135deg, var(--primary-color) 0%, #0a3d6b 100%);
+    padding: 1rem;
+    border-radius: 10px;
+    margin-top: 1rem;
+  }
+
+  .navbar-nav {
+    align-items: stretch !important;
+  }
+
+  .nav-item {
+    margin-bottom: 0.5rem;
+  }
+
+  .nav-link {
+    padding: 0.75rem 1rem !important;
+  }
+
+  /* Products - mobile layout */
   .product-title {
     min-height: auto;
     font-size: 1rem;
@@ -1288,17 +1404,116 @@ body {
     font-size: 1.3rem;
   }
 
-  .footer {
-    padding: 3rem 0 0 0;
+  .product-body {
+    padding: 1.25rem;
   }
 
+  /* Modal improvements */
+  .modal-dialog {
+    margin: 0.5rem;
+    max-width: calc(100% - 1rem);
+  }
+
+  .modal-lg {
+    max-width: calc(100% - 1rem);
+  }
+
+  .modal-body {
+    padding: 1rem;
+  }
+
+  .modal-footer {
+    flex-wrap: wrap;
+  }
+
+  .modal-footer .btn {
+    flex: 1;
+    min-width: 120px;
+    margin: 0.25rem;
+  }
+
+  /* Form improvements */
+  .form-control,
+  .form-select {
+    font-size: 16px; /* Prevents zoom on iOS */
+    padding: 0.75rem;
+  }
+
+  /* Sidebars - full width on mobile */
   .cart-sidebar,
   .login-sidebar {
     width: 100%;
     right: -100%;
   }
+
+  .cart-header,
+  .login-header {
+    padding: 1.25rem 1rem;
+  }
+
+  .cart-body,
+  .login-body {
+    padding: 1rem;
+  }
+
+  .cart-footer {
+    padding: 1.25rem 1rem;
+  }
+
+  /* Footer */
+  .footer {
+    padding: 3rem 0 0 0;
+  }
+
+  .footer-title {
+    font-size: 1.1rem;
+  }
+
+  .social-icon {
+    width: 38px;
+    height: 38px;
+    font-size: 1.1rem;
+  }
 }
 
+/* Mobile Portrait (576px - 767px) */
+@media (max-width: 767px) {
+  /* Product cards - better mobile layout */
+  .col-lg-3,
+  .col-md-4,
+  .col-sm-6 {
+    max-width: 100%;
+    flex: 0 0 100%;
+  }
+
+  /* Category filter - full width buttons */
+  .category-filter {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .category-btn {
+    width: 100%;
+    justify-content: center;
+    padding: 1rem 1.5rem;
+  }
+
+  /* Carousel indicators */
+  .carousel-indicators {
+    bottom: 20px;
+  }
+
+  .carousel-indicators [data-bs-target] {
+    width: 10px;
+    height: 10px;
+  }
+
+  .carousel-indicators [data-bs-target].active {
+    width: 25px;
+  }
+}
+
+/* Small Mobile (up to 575px) */
 @media (max-width: 576px) {
   .hero-slide {
     min-height: 350px;
@@ -1319,28 +1534,124 @@ body {
 
   .carousel-control-prev,
   .carousel-control-next {
-    width: 40px;
-    height: 40px;
+    width: 44px;
+    height: 44px;
   }
 
   .carousel-control-icon {
-    font-size: 1.2rem;
+    font-size: 1.3rem;
   }
 
   .navbar-brand {
     font-size: 1.25rem;
   }
 
+  .navbar-logo {
+    height: 35px;
+  }
+
   .search-input {
     padding: 15px 20px;
   }
 
+  /* Button adjustments */
+  .btn-cart {
+    width: 44px;
+    height: 44px;
+    font-size: 1.2rem;
+  }
+
+  .cart-badge {
+    font-size: 0.65rem;
+    padding: 0.2rem 0.4rem;
+  }
+
+  /* Product cards */
+  .product-card {
+    margin-bottom: 1rem;
+  }
+
+  .product-footer {
+    flex-direction: row;
+    justify-content: space-between;
+  }
+
+  /* Back to top */
   .back-to-top {
     width: 45px;
     height: 45px;
     bottom: 20px;
     right: 20px;
     font-size: 1.3rem;
+  }
+}
+
+/* Extra Small Devices (up to 400px) */
+@media (max-width: 400px) {
+  .hero-title {
+    font-size: 1.5rem;
+  }
+
+  .hero-description {
+    font-size: 0.9rem;
+  }
+
+  .navbar-brand {
+    font-size: 1.1rem;
+  }
+
+  .navbar-logo {
+    height: 32px;
+  }
+
+  .product-price {
+    font-size: 1.2rem;
+  }
+
+  .btn-main {
+    padding: 10px 20px;
+    font-size: 0.9rem;
+  }
+
+  .category-btn {
+    padding: 0.85rem 1.25rem;
+    font-size: 0.9rem;
+  }
+
+  .category-btn i {
+    font-size: 1.3rem;
+  }
+
+  .btn-view-details,
+  .btn-add-cart {
+    width: 40px;
+    height: 40px;
+    font-size: 1.1rem;
+  }
+
+  .back-to-top {
+    width: 42px;
+    height: 42px;
+    font-size: 1.2rem;
+    bottom: 15px;
+    right: 15px;
+  }
+}
+
+/* Landscape Orientation Specific */
+@media (max-height: 500px) and (orientation: landscape) {
+  .hero-slide {
+    min-height: 100vh;
+    padding: 40px 0;
+  }
+
+  .cart-sidebar,
+  .login-sidebar {
+    overflow-y: auto;
+  }
+
+  .modal-dialog {
+    margin: 0.5rem auto;
   }
 }
 

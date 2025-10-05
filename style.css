@@ -901,42 +901,166 @@ section h4::after {
 }
 
 /* ===========================
-   Responsive Design
+   Responsive Design - Enhanced for All Devices
    =========================== */
+
+/* Tablet Landscape (992px - 1199px) */
+@media (max-width: 1199px) {
+  .container {
+    max-width: 960px;
+  }
+
+  .hero h1 {
+    font-size: 2.5rem;
+  }
+
+  .product-title {
+    font-size: 1rem;
+    min-height: 45px;
+  }
+
+  .navbar .btn-main {
+    padding: 6px 20px;
+    font-size: 0.95rem;
+  }
+}
+
+/* Tablet Portrait (768px - 991px) */
+@media (max-width: 991px) {
+  .container {
+    max-width: 720px;
+  }
+
+  .hero h1 {
+    font-size: 2.25rem;
+  }
+
+  .hero {
+    padding: 80px 0 60px 0;
+  }
+
+  .category-filter {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+
+  .category-btn {
+    padding: 0.85rem 1.5rem;
+    font-size: 0.95rem;
+  }
+
+  .product-actions {
+    flex-direction: row;
+    gap: 0.5rem;
+  }
+
+  .btn-view-details,
+  .btn-add-cart {
+    width: 38px;
+    height: 38px;
+    font-size: 1.1rem;
+  }
+
+  .nav-tabs .nav-link {
+    padding: 0.85rem 1.5rem;
+    font-size: 0.95rem;
+  }
+}
+
+/* Mobile Landscape & Small Tablets (768px - 991px) */
 @media (max-width: 768px) {
   .hero h1 {
     font-size: 2rem;
+    margin-bottom: 1rem;
   }
 
-  .hero .input-group {
+  .hero .lead {
+    font-size: 1rem;
+  }
+
+  /* Mobile-friendly input groups */
+  .hero .input-group,
+  .search-bar {
     flex-direction: column;
+    border-radius: 15px !important;
   }
 
   .hero .input-group .form-select,
   .hero .input-group .form-control,
-  .hero .input-group .btn-main {
-    border-radius: 50px !important;
+  .hero .input-group .btn-main,
+  .search-select,
+  .search-input-home,
+  .search-btn {
+    border-radius: 15px !important;
     margin-bottom: 0.5rem;
     width: 100%;
-  }
-
-  .hero .input-group .form-select {
     max-width: 100%;
   }
 
-  .category-icon {
-    margin-bottom: 1rem;
+  .hero .input-group .btn-main,
+  .search-btn {
+    margin-bottom: 0;
+    padding: 15px 25px;
   }
 
+  /* Touch-friendly buttons - minimum 44x44px */
+  .btn-main,
+  .btn-outline-primary,
+  .btn-outline-light {
+    min-height: 44px;
+    padding: 12px 24px;
+  }
+
+  .btn-view-details,
+  .btn-add-cart {
+    width: 44px;
+    height: 44px;
+    font-size: 1.2rem;
+  }
+
+  /* Category icons - better mobile layout */
+  .category-icon {
+    margin-bottom: 1rem;
+    padding: 1.5rem 1rem;
+  }
+
+  .category-icon i {
+    font-size: 2.5rem;
+  }
+
+  /* Map responsive */
   #pharmacyMap {
     height: 300px;
   }
 
+  /* Navigation improvements */
+  .navbar-collapse {
+    background: linear-gradient(135deg, var(--primary-color) 0%, #0a3d6b 100%);
+    padding: 1rem;
+    border-radius: 10px;
+    margin-top: 1rem;
+  }
+
+  .navbar-nav {
+    align-items: stretch !important;
+  }
+
+  .nav-item {
+    margin-bottom: 0.5rem;
+  }
+
+  .nav-link {
+    padding: 0.75rem 1rem !important;
+  }
+
+  /* Tabs - mobile friendly */
   .nav-tabs .nav-link {
     padding: 0.75rem 1rem;
     font-size: 0.9rem;
   }
 
+  /* Products - mobile grid */
   .product-title {
     min-height: auto;
     font-size: 1rem;
@@ -945,11 +1069,106 @@ section h4::after {
   .product-price {
     font-size: 1.3rem;
   }
+
+  .product-body {
+    padding: 1.25rem;
+  }
+
+  /* Modal improvements */
+  .modal-dialog {
+    margin: 0.5rem;
+    max-width: calc(100% - 1rem);
+  }
+
+  .modal-lg {
+    max-width: calc(100% - 1rem);
+  }
+
+  .modal-body {
+    padding: 1rem;
+  }
+
+  .modal-footer {
+    flex-wrap: wrap;
+  }
+
+  .modal-footer .btn {
+    flex: 1;
+    min-width: 120px;
+    margin: 0.25rem;
+  }
+
+  /* Form improvements */
+  .form-control,
+  .form-select {
+    font-size: 16px; /* Prevents zoom on iOS */
+    padding: 0.75rem;
+  }
+
+  .input-group-text {
+    padding: 0.75rem;
+  }
+
+  /* Back to top button */
+  .back-to-top {
+    width: 50px;
+    height: 50px;
+    bottom: 20px;
+    right: 20px;
+  }
 }
 
+/* Mobile Portrait (576px - 767px) */
+@media (max-width: 767px) {
+  /* Carousel adjustments */
+  .carousel-control-prev,
+  .carousel-control-next {
+    width: 45px;
+    height: 45px;
+  }
+
+  .carousel-control-prev {
+    left: 10px;
+  }
+
+  .carousel-control-next {
+    right: 10px;
+  }
+
+  .carousel-control-icon {
+    font-size: 1.5rem;
+  }
+
+  .carousel-indicators {
+    bottom: 20px;
+  }
+
+  /* Product cards - better mobile layout */
+  .col-lg-3,
+  .col-md-4,
+  .col-sm-6 {
+    max-width: 100%;
+    flex: 0 0 100%;
+  }
+
+  /* Category filter - stack on mobile */
+  .category-filter {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .category-btn {
+    width: 100%;
+    justify-content: center;
+    padding: 1rem 1.5rem;
+  }
+}
+
+/* Small Mobile (up to 575px) */
 @media (max-width: 576px) {
   .hero {
     padding: 60px 0 40px 0;
+    min-height: 400px;
   }
 
   .hero h1 {
@@ -960,8 +1179,83 @@ section h4::after {
     font-size: 1.25rem;
   }
 
+  .navbar-logo {
+    height: 35px;
+  }
+
   section {
     padding: 2rem 0;
+  }
+
+  /* Button adjustments */
+  .btn-cart {
+    width: 44px;
+    height: 44px;
+    font-size: 1.2rem;
+  }
+
+  .cart-badge {
+    font-size: 0.65rem;
+    padding: 0.2rem 0.4rem;
+  }
+
+  /* Product cards - full width on small screens */
+  .product-card {
+    margin-bottom: 1rem;
+  }
+
+  .product-footer {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  /* Footer adjustments */
+  .footer-title {
+    font-size: 1.1rem;
+  }
+
+  .social-icon {
+    width: 38px;
+    height: 38px;
+    font-size: 1.1rem;
+  }
+
+  /* Smaller back to top */
+  .back-to-top {
+    width: 45px;
+    height: 45px;
+    font-size: 1.3rem;
+    bottom: 15px;
+    right: 15px;
+  }
+}
+
+/* Extra Small Devices (up to 400px) */
+@media (max-width: 400px) {
+  .hero h1 {
+    font-size: 1.5rem;
+  }
+
+  .navbar-brand {
+    font-size: 1.1rem;
+  }
+
+  .product-price {
+    font-size: 1.2rem;
+  }
+
+  .btn-main {
+    padding: 10px 20px;
+    font-size: 0.9rem;
+  }
+
+  .category-icon {
+    padding: 1rem 0.75rem;
+  }
+
+  .category-icon i {
+    font-size: 2rem;
   }
 }
 
