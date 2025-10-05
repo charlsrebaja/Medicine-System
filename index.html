@@ -995,7 +995,15 @@
       function getProductsData() {
         const storedProducts = localStorage.getItem('products');
         if (storedProducts) {
-          return JSON.parse(storedProducts);
+          const products = JSON.parse(storedProducts);
+          // Check if products contain old placeholder URLs and clear if found
+          const hasOldUrls = products.some(p => p.image && p.image.includes('via.placeholder.com'));
+          if (hasOldUrls) {
+            // Clear old data and reload from products-data.js
+            localStorage.removeItem('products');
+          } else {
+            return products;
+          }
         }
         // Fallback to hard-coded data and initialize localStorage
         if (typeof productsData !== 'undefined') {
@@ -1041,7 +1049,7 @@
             col.innerHTML = `
               <div class="product-card">
                 <div class="product-image">
-                  <img src="${product.image}" alt="${product.name}" onerror="this.src='https://via.placeholder.com/300x300/00bfa6/ffffff?text=${encodeURIComponent(product.name)}'">
+                  <img src="${product.image}" alt="${product.name}">
                   <span class="product-badge">${product.category}</span>
                 </div>
                 <div class="product-body">

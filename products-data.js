@@ -74,7 +74,7 @@ const productsData = [
         name: 'Blood Pressure Monitor',
         category: 'Diagnostics',
         price: 45.99,
-        image: 'https://via.placeholder.com/300x300/072b4e/ffffff?text=BP+Monitor',
+        image: 'images/Medical Devices.jfif',
         description: 'Digital blood pressure monitoring device with large display.',
         featured: true
     },
@@ -83,7 +83,7 @@ const productsData = [
         name: 'Digital Thermometer',
         category: 'Diagnostics',
         price: 12.99,
-        image: 'https://via.placeholder.com/300x300/072b4e/ffffff?text=Thermometer',
+        image: 'images/Medical Devices.jfif',
         description: 'Fast and accurate digital thermometer. 10-second reading.'
     },
     {
@@ -91,7 +91,7 @@ const productsData = [
         name: 'Pulse Oximeter',
         category: 'Diagnostics',
         price: 35.99,
-        image: 'https://via.placeholder.com/300x300/072b4e/ffffff?text=Oximeter',
+        image: 'images/Medical Devices.jfif',
         description: 'Fingertip pulse oximeter for oxygen saturation monitoring.'
     },
     {
@@ -99,7 +99,7 @@ const productsData = [
         name: 'Blood Glucose Monitor Kit',
         category: 'Diagnostics',
         price: 39.99,
-        image: 'https://via.placeholder.com/300x300/072b4e/ffffff?text=Glucose+Kit',
+        image: 'images/Diabetes Care.jfif',
         description: 'Complete blood glucose monitoring kit with 50 test strips.'
     },
     // Supplements
@@ -108,7 +108,7 @@ const productsData = [
         name: 'Vitamin D3 1000 IU',
         category: 'Supplements',
         price: 18.99,
-        image: 'https://via.placeholder.com/300x300/feca57/333333?text=Vitamin+D3',
+        image: 'images/Supplements & vitamins.jpg',
         description: 'Daily vitamin D supplement for bone health. 120 softgels.',
         featured: true
     },
@@ -117,7 +117,7 @@ const productsData = [
         name: 'Omega-3 Fish Oil',
         category: 'Supplements',
         price: 24.99,
-        image: 'https://via.placeholder.com/300x300/feca57/333333?text=Omega-3',
+        image: 'images/Supplements & vitamins.jpg',
         description: 'Heart health supplement with EPA and DHA. 180 capsules.'
     },
     {
@@ -125,7 +125,7 @@ const productsData = [
         name: 'Multivitamin Complex',
         category: 'Supplements',
         price: 22.99,
-        image: 'https://via.placeholder.com/300x300/feca57/333333?text=Multivitamin',
+        image: 'images/Supplements & vitamins.jpg',
         description: 'Complete daily multivitamin with minerals. 90 tablets.'
     },
     {
@@ -133,7 +133,7 @@ const productsData = [
         name: 'Protein Powder',
         category: 'Supplements',
         price: 39.99,
-        image: 'https://via.placeholder.com/300x300/feca57/333333?text=Protein',
+        image: 'images/Supplements & vitamins.jpg',
         description: 'Whey protein isolate for muscle recovery. 2lb container.'
     },
     {
@@ -141,7 +141,7 @@ const productsData = [
         name: 'Probiotics 10 Billion CFU',
         category: 'Supplements',
         price: 28.99,
-        image: 'https://via.placeholder.com/300x300/feca57/333333?text=Probiotics',
+        image: 'images/Supplements & vitamins.jpg',
         description: 'Daily probiotic for digestive health. 60 capsules.'
     },
     {
@@ -149,7 +149,7 @@ const productsData = [
         name: 'Collagen Peptides',
         category: 'Supplements',
         price: 32.99,
-        image: 'https://via.placeholder.com/300x300/feca57/333333?text=Collagen',
+        image: 'images/Organika_Salmon_Collagen-.png',
         description: 'Hydrolyzed collagen for skin and joint health. 16oz powder.'
     }
 ];

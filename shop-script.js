@@ -2,7 +2,15 @@
 function getProductsData() {
     const storedProducts = localStorage.getItem('products');
     if (storedProducts) {
-        return JSON.parse(storedProducts);
+        const products = JSON.parse(storedProducts);
+        // Check if products contain old placeholder URLs and clear if found
+        const hasOldUrls = products.some(p => p.image && p.image.includes('via.placeholder.com'));
+        if (hasOldUrls) {
+            // Clear old data and reload from products-data.js
+            localStorage.removeItem('products');
+        } else {
+            return products;
+        }
     }
     // Fallback to hard-coded data and initialize localStorage
     if (typeof productsData !== 'undefined') {
