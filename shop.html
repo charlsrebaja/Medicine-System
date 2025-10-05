@@ -34,8 +34,22 @@
                             <span class="cart-badge position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" id="cartCount">0</span>
                         </button>
                     </li>
-                    <li class="nav-item ms-3">
+                    <li class="nav-item ms-3" id="loginBtnContainer">
                         <button class="btn btn-outline-light" id="loginBtn">Login</button>
+                    </li>
+                    <li class="nav-item ms-3 d-none" id="profileDropdownContainer">
+                        <div class="dropdown">
+                            <button class="btn btn-outline-light dropdown-toggle" type="button" id="profileDropdown" data-bs-toggle="dropdown">
+                                <i class="bi bi-person-circle me-1"></i>
+                                <span id="profileUserName">User</span>
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li><a class="dropdown-item" href="#"><i class="bi bi-person me-2"></i>My Account</a></li>
+                                <li id="dashboardLinkItem" class="d-none"><a class="dropdown-item" href="admin-dashboard.html"><i class="bi bi-speedometer2 me-2"></i>Dashboard</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item text-danger" href="#" id="logoutBtn"><i class="bi bi-box-arrow-right me-2"></i>Logout</a></li>
+                            </ul>
+                        </div>
                     </li>
                 </ul>
             </div>

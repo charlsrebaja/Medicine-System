@@ -58,8 +58,22 @@
                 >
               </button>
             </li>
-            <li class="nav-item ms-3">
+            <li class="nav-item ms-3" id="loginBtnContainer">
               <button class="btn btn-outline-light" id="loginBtn">Login</button>
+            </li>
+            <li class="nav-item ms-3 d-none" id="profileDropdownContainer">
+              <div class="dropdown">
+                <button class="btn btn-outline-light dropdown-toggle" type="button" id="profileDropdown" data-bs-toggle="dropdown">
+                  <i class="bi bi-person-circle me-1"></i>
+                  <span id="profileUserName">User</span>
+                </button>
+                <ul class="dropdown-menu dropdown-menu-end">
+                  <li><a class="dropdown-item" href="#"><i class="bi bi-person me-2"></i>My Account</a></li>
+                  <li id="dashboardLinkItem" class="d-none"><a class="dropdown-item" href="admin-dashboard.html"><i class="bi bi-speedometer2 me-2"></i>Dashboard</a></li>
+                  <li><hr class="dropdown-divider"></li>
+                  <li><a class="dropdown-item text-danger" href="#" id="logoutBtn"><i class="bi bi-box-arrow-right me-2"></i>Logout</a></li>
+                </ul>
+              </div>
             </li>
           </ul>
         </div>
@@ -879,6 +893,60 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
+      // Check login status on page load
+      function checkLoginStatus() {
+        const isAdminLoggedIn = localStorage.getItem('isAdminLoggedIn');
+        const isUserLoggedIn = localStorage.getItem('isUserLoggedIn');
+        const adminEmail = localStorage.getItem('adminEmail');
+        const userEmail = localStorage.getItem('userEmail');
+        const userName = localStorage.getItem('userName');
+
+        const loginBtnContainer = document.getElementById('loginBtnContainer');
+        const profileDropdownContainer = document.getElementById('profileDropdownContainer');
+        const profileUserName = document.getElementById('profileUserName');
+        const dashboardLinkItem = document.getElementById('dashboardLinkItem');
+
+        if (isAdminLoggedIn) {
+          // Admin is logged in
+          loginBtnContainer.classList.add('d-none');
+          profileDropdownContainer.classList.remove('d-none');
+          profileUserName.textContent = 'Admin';
+          dashboardLinkItem.classList.remove('d-none');
+        } else if (isUserLoggedIn) {
+          // Regular user is logged in
+          loginBtnContainer.classList.add('d-none');
+          profileDropdownContainer.classList.remove('d-none');
+          profileUserName.textContent = userName || userEmail.split('@')[0];
+          dashboardLinkItem.classList.add('d-none');
+        } else {
+          // No one logged in
+          loginBtnContainer.classList.remove('d-none');
+          profileDropdownContainer.classList.add('d-none');
+        }
+      }
+
+      // Call on page load
+      document.addEventListener('DOMContentLoaded', checkLoginStatus);
+
+      // Logout from profile dropdown
+      const logoutBtn = document.getElementById('logoutBtn');
+      if (logoutBtn) {
+        logoutBtn.addEventListener('click', function(e) {
+          e.preventDefault();
+          if (confirm('Are you sure you want to logout?')) {
+            // Clear all login data
+            localStorage.removeItem('isAdminLoggedIn');
+            localStorage.removeItem('isUserLoggedIn');
+            localStorage.removeItem('adminEmail');
+            localStorage.removeItem('userEmail');
+            localStorage.removeItem('userName');
+            
+            // Refresh page to update UI
+            window.location.reload();
+          }
+        });
+      }
+
       // Navbar scroll effect
       window.addEventListener("scroll", function () {
         const navbar = document.querySelector(".navbar");
@@ -1209,7 +1277,7 @@
               // Redirect to admin dashboard
               setTimeout(() => {
                 window.location.href = 'admin-dashboard.html';
-              }, 800);
+              }, 500);
             }, 1000);
           } else {
             // Invalid credentials
@@ -1333,7 +1401,12 @@
             submitBtn.classList.add('btn-success');
 
             // Show success notification
-            showNotification("Account created successfully! You can now login.");
+            showNotification("Account created successfully!");
+
+            // Auto-login the new user
+            localStorage.setItem('isUserLoggedIn', 'true');
+            localStorage.setItem('userEmail', email);
+            localStorage.setItem('userName', name);
 
             // Reset form and close after delay
             setTimeout(() => {
@@ -1342,6 +1415,10 @@
               submitBtn.innerHTML = '<i class="bi bi-person-check me-2"></i>Create Account';
               submitBtn.classList.remove('btn-success');
               submitBtn.disabled = false;
+              
+              // Update UI to show profile dropdown
+              checkLoginStatus();
+              showNotification("Welcome, " + name + "!");
             }, 1500);
           }, 1000);
         });

@@ -6,7 +6,7 @@ const productsData = [
         name: 'Amoxicillin 500mg',
         category: 'Medicine',
         price: 12.99,
-        image: 'https://via.placeholder.com/300x300/00bfa6/ffffff?text=Amoxicillin',
+        image: 'images/Amoxicillin_500mg.png',
         description: 'Antibiotic medication for bacterial infections. 30 capsules per bottle.'
     },
     {
@@ -14,7 +14,7 @@ const productsData = [
         name: 'Ibuprofen 400mg',
         category: 'Medicine',
         price: 8.99,
-        image: 'https://via.placeholder.com/300x300/00bfa6/ffffff?text=Ibuprofen',
+        image: 'images/Ibuprofen_400mg.png',
         description: 'Pain relief and anti-inflammatory medication. 24 tablets.'
     },
     {
@@ -22,7 +22,7 @@ const productsData = [
         name: 'Paracetamol 500mg',
         category: 'Medicine',
         price: 6.99,
-        image: 'https://via.placeholder.com/300x300/00bfa6/ffffff?text=Paracetamol',
+        image: 'images/Paracetamol_500mg.png',
         description: 'Fever reducer and pain reliever. 50 tablets per pack.'
     },
     {
@@ -30,7 +30,7 @@ const productsData = [
         name: 'Omeprazole 20mg',
         category: 'Medicine',
         price: 15.99,
-        image: 'https://via.placeholder.com/300x300/00bfa6/ffffff?text=Omeprazole',
+        image: 'images/Omeprazole 20mg.png',
         description: 'Treats stomach acid and heartburn. 28 capsules.'
     },
     // Wellness
@@ -39,7 +39,7 @@ const productsData = [
         name: 'Essential Oil Set',
         category: 'Wellness',
         price: 29.99,
-        image: 'https://via.placeholder.com/300x300/01957e/ffffff?text=Essential+Oils',
+        image: 'images/Essential Oil Set.jpg',
         description: 'Aromatherapy essential oils for relaxation. Set of 6 oils.'
     },
     {
@@ -47,7 +47,7 @@ const productsData = [
         name: 'Yoga Mat',
         category: 'Wellness',
         price: 24.99,
-        image: 'https://via.placeholder.com/300x300/01957e/ffffff?text=Yoga+Mat',
+        image: 'images/Yoga Mat.jpg',
         description: 'Non-slip yoga mat for exercise and meditation. 6mm thick.'
     },
     {
@@ -55,7 +55,7 @@ const productsData = [
         name: 'Meditation Cushion',
         category: 'Wellness',
         price: 34.99,
-        image: 'https://via.placeholder.com/300x300/01957e/ffffff?text=Meditation',
+        image: 'images/Meditation Cushion.jpg',
         description: 'Comfortable meditation cushion for mindfulness practice.'
     },
     {
@@ -63,7 +63,7 @@ const productsData = [
         name: 'Herbal Tea Collection',
         category: 'Wellness',
         price: 18.99,
-        image: 'https://via.placeholder.com/300x300/01957e/ffffff?text=Herbal+Tea',
+        image: 'images/Herbal Tea Collection.jpg',
         description: 'Organic herbal tea collection. 20 tea bags assorted flavors.'
     },
     // Diagnostics
@@ -158,10 +158,40 @@ let currentFilter = 'all';
 
 // Initialize when DOM is loaded
 document.addEventListener('DOMContentLoaded', function() {
+    checkLoginStatus();
     displayProducts(productsData);
     updateCartCount();
     setupEventListeners();
 });
+
+// Check login status and update navbar
+function checkLoginStatus() {
+    const isAdminLoggedIn = localStorage.getItem('isAdminLoggedIn');
+    const isUserLoggedIn = localStorage.getItem('isUserLoggedIn');
+    const adminEmail = localStorage.getItem('adminEmail');
+    const userEmail = localStorage.getItem('userEmail');
+    const userName = localStorage.getItem('userName');
+
+    const loginBtnContainer = document.getElementById('loginBtnContainer');
+    const profileDropdownContainer = document.getElementById('profileDropdownContainer');
+    const profileUserName = document.getElementById('profileUserName');
+    const dashboardLinkItem = document.getElementById('dashboardLinkItem');
+
+    if (isAdminLoggedIn) {
+        loginBtnContainer.classList.add('d-none');
+        profileDropdownContainer.classList.remove('d-none');
+        profileUserName.textContent = 'Admin';
+        dashboardLinkItem.classList.remove('d-none');
+    } else if (isUserLoggedIn) {
+        loginBtnContainer.classList.add('d-none');
+        profileDropdownContainer.classList.remove('d-none');
+        profileUserName.textContent = userName || userEmail.split('@')[0];
+        dashboardLinkItem.classList.add('d-none');
+    } else {
+        loginBtnContainer.classList.remove('d-none');
+        profileDropdownContainer.classList.add('d-none');
+    }
+}
 
 // Setup Event Listeners
 function setupEventListeners() {
@@ -213,6 +243,22 @@ function setupEventListeners() {
         alert('Login functionality would be implemented here.');
         closeLoginSidebar();
     });
+
+    // Logout from profile dropdown
+    const logoutBtn = document.getElementById('logoutBtn');
+    if (logoutBtn) {
+        logoutBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            if (confirm('Are you sure you want to logout?')) {
+                localStorage.removeItem('isAdminLoggedIn');
+                localStorage.removeItem('isUserLoggedIn');
+                localStorage.removeItem('adminEmail');
+                localStorage.removeItem('userEmail');
+                localStorage.removeItem('userName');
+                window.location.reload();
+            }
+        });
+    }
 
     // Back to top button
     const backToTopBtn = document.getElementById('backToTop');
