@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shop - Moving Medicine</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" href="shop-style.css">
+</head>
+<body>
+    <!-- Header -->
+    <nav class="navbar navbar-expand-lg navbar-dark py-3">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="index.html">Moving Medicine</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navMenu">
+                <ul class="navbar-nav ms-auto align-items-center">
+                    <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Services</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Resources</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="shop.html">Shop</a></li>
+                    <li class="nav-item ms-3">
+                        <a class="btn btn-main" href="#">Appointment</a>
+                    </li>
+                    <li class="nav-item ms-3">
+                        <button class="btn btn-cart position-relative" id="cartBtn">
+                            <i class="bi bi-cart3"></i>
+                            <span class="cart-badge position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" id="cartCount">0</span>
+                        </button>
+                    </li>
+                    <li class="nav-item ms-3">
+                        <button class="btn btn-outline-light" id="loginBtn">Login</button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Carousel Section -->
+    <div id="heroCarousel" class="carousel slide carousel-fade" data-bs-ride="carousel">
+        <!-- Indicators -->
+        <div class="carousel-indicators">
+            <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="0" class="active"></button>
+            <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="1"></button>
+            <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="2"></button>
+        </div>
+
+        <!-- Slides -->
+        <div class="carousel-inner">
+            <!-- Slide 1 -->
+            <div class="carousel-item active">
+                <div class="hero-slide" style="background-image: linear-gradient(135deg, rgba(233, 246, 252, 0.85) 0%, rgba(249, 252, 255, 0.9) 100%), url('https://images.unsplash.com/photo-1631549916768-4119b2e5f926?w=1920&q=80');">
+                    <div class="container">
+                        <div class="row align-items-center min-vh-50">
+                            <div class="col-lg-8 mx-auto text-center">
+                                <h1 class="hero-title mb-4">Quality Medicines for Your Health</h1>
+                                <p class="hero-description mb-4">Browse our wide range of trusted medications and healthcare products</p>
+                                <div class="hero-actions">
+                                    <a href="#products" class="btn btn-main btn-lg me-3">
+                                        <i class="bi bi-shop me-2"></i>Shop Now
+                                    </a>
+                                    <a href="#" class="btn btn-outline-primary btn-lg">
+                                        <i class="bi bi-info-circle me-2"></i>Learn More
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 2 -->
+            <div class="carousel-item">
+                <div class="hero-slide" style="background-image: linear-gradient(135deg, rgba(233, 246, 252, 0.85) 0%, rgba(249, 252, 255, 0.9) 100%), url('https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=1920&q=80');">
+                    <div class="container">
+                        <div class="row align-items-center min-vh-50">
+                            <div class="col-lg-8 mx-auto text-center">
+                                <h1 class="hero-title mb-4">Wellness & Supplements</h1>
+                                <p class="hero-description mb-4">Discover premium vitamins and wellness products for a healthier you</p>
+                                <div class="hero-actions">
+                                    <a href="#products" class="btn btn-main btn-lg me-3">
+                                        <i class="bi bi-heart-pulse me-2"></i>Explore Wellness
+                                    </a>
+                                    <a href="#" class="btn btn-outline-primary btn-lg">
+                                        <i class="bi bi-book me-2"></i>Health Tips
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 3 -->
+            <div class="carousel-item">
+                <div class="hero-slide" style="background-image: linear-gradient(135deg, rgba(233, 246, 252, 0.85) 0%, rgba(249, 252, 255, 0.9) 100%), url('https://images.unsplash.com/photo-1505751172876-fa1923c5c528?w=1920&q=80');">
+                    <div class="container">
+                        <div class="row align-items-center min-vh-50">
+                            <div class="col-lg-8 mx-auto text-center">
+                                <h1 class="hero-title mb-4">Diagnostic Tools & Equipment</h1>
+                                <p class="hero-description mb-4">Professional-grade diagnostic devices for home health monitoring</p>
+                                <div class="hero-actions">
+                                    <a href="#products" class="btn btn-main btn-lg me-3">
+                                        <i class="bi bi-clipboard2-pulse me-2"></i>View Diagnostics
+                                    </a>
+                                    <a href="#" class="btn btn-outline-primary btn-lg">
+                                        <i class="bi bi-telephone me-2"></i>Contact Us
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Controls -->
+        <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
+            <span class="carousel-control-icon">
+                <i class="bi bi-chevron-left"></i>
+            </span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next">
+            <span class="carousel-control-icon">
+                <i class="bi bi-chevron-right"></i>
+            </span>
+            <span class="visually-hidden">Next</span>
+        </button>
+    </div>
+
+    <!-- Search Section -->
+    <section class="search-section py-4 bg-white shadow-sm">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 mx-auto">
+                    <div class="input-group search-bar-wrapper">
+                        <input type="text" class="form-control search-input" id="searchInput" placeholder="Search for medicines, supplements, or diagnostics...">
+                        <button class="btn btn-main" id="searchBtn">
+                            <i class="bi bi-search me-2"></i>Search
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Shop Section -->
+    <section class="py-5">
+        <div class="container">
+            <!-- Category Filter Tabs -->
+            <div class="category-filter-wrapper mb-5">
+                <div class="category-filter">
+                    <button class="category-btn active" data-category="all" onclick="filterByCategory('all')">
+                        <i class="bi bi-grid-fill"></i>
+                        <span>All Products</span>
+                    </button>
+                    <button class="category-btn" data-category="Medicine" onclick="filterByCategory('Medicine')">
+                        <i class="bi bi-capsule"></i>
+                        <span>Medicine</span>
+                    </button>
+                    <button class="category-btn" data-category="Wellness" onclick="filterByCategory('Wellness')">
+                        <i class="bi bi-heart-pulse"></i>
+                        <span>Wellness</span>
+                    </button>
+                    <button class="category-btn" data-category="Diagnostics" onclick="filterByCategory('Diagnostics')">
+                        <i class="bi bi-clipboard2-pulse"></i>
+                        <span>Diagnostics</span>
+                    </button>
+                    <button class="category-btn" data-category="Supplements" onclick="filterByCategory('Supplements')">
+                        <i class="bi bi-cup-straw"></i>
+                        <span>Supplements</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Product Count -->
+            <div class="row mb-3">
+                <div class="col">
+                    <p class="text-muted">Showing <span class="fw-bold text-dark" id="productCount">0</span> products</p>
+                </div>
+            </div>
+
+            <!-- Products Grid -->
+            <div class="row g-4" id="productsContainer">
+                <!-- Products will be dynamically inserted here -->
+            </div>
+
+            <!-- No Results Message -->
+            <div id="noResults" class="text-center py-5 d-none">
+                <i class="bi bi-search fs-1 text-muted"></i>
+                <p class="text-muted mt-3">No products found matching your search.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Product Detail Modal -->
+    <div class="modal fade" id="productModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalProductName"></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <img id="modalProductImage" src="" alt="" class="img-fluid rounded">
+                        </div>
+                        <div class="col-md-6">
+                            <p class="text-muted mb-2">
+                                <span class="badge bg-info" id="modalProductCategory"></span>
+                            </p>
+                            <h3 class="text-primary mb-3">$<span id="modalProductPrice"></span></h3>
+                            <p id="modalProductDescription"></p>
+                            <div class="mt-4">
+                                <label class="form-label fw-bold">Quantity:</label>
+                                <div class="input-group mb-3" style="max-width: 150px;">
+                                    <button class="btn btn-outline-secondary" type="button" onclick="decreaseQuantity()">-</button>
+                                    <input type="number" class="form-control text-center" id="modalQuantity" value="1" min="1">
+                                    <button class="btn btn-outline-secondary" type="button" onclick="increaseQuantity()">+</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-main" onclick="addToCartFromModal()">
+                        <i class="bi bi-cart-plus me-2"></i>Add to Cart
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Shopping Cart Sidebar -->
+    <div class="cart-sidebar" id="cartSidebar">
+        <div class="cart-header">
+            <h5><i class="bi bi-cart3 me-2"></i>Shopping Cart</h5>
+            <button class="btn-close-cart" id="closeCart">
+                <i class="bi bi-x-lg"></i>
+            </button>
+        </div>
+        <div class="cart-body" id="cartBody">
+            <div class="empty-cart text-center py-5">
+                <i class="bi bi-cart-x" style="font-size: 4rem; color: #ccc"></i>
+                <p class="mt-3 text-muted">Your cart is empty</p>
+            </div>
+        </div>
+        <div class="cart-footer">
+            <div class="cart-total">
+                <span>Total:</span>
+                <span class="total-amount" id="cartTotal">$0.00</span>
+            </div>
+            <button class="btn btn-main w-100 mb-2" id="checkoutBtn">
+                <i class="bi bi-credit-card me-2"></i>Proceed to Checkout
+            </button>
+            <button class="btn btn-outline-secondary w-100" id="clearCartBtn">
+                <i class="bi bi-trash me-2"></i>Clear Cart
+            </button>
+        </div>
+    </div>
+
+    <!-- Cart Overlay -->
+    <div class="cart-overlay" id="cartOverlay"></div>
+
+    <!-- Login Sidebar -->
+    <div class="login-sidebar" id="loginSidebar">
+        <div class="login-header">
+            <h5><i class="bi bi-person-circle me-2"></i>Login to Your Account</h5>
+            <button class="btn-close-login" id="closeLogin">
+                <i class="bi bi-x-lg"></i>
+            </button>
+        </div>
+        <div class="login-body">
+            <form id="loginForm">
+                <div class="mb-4">
+                    <label for="loginEmail" class="form-label">Email Address</label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="bi bi-envelope"></i></span>
+                        <input type="email" class="form-control" id="loginEmail" placeholder="Enter your email" required>
+                    </div>
+                </div>
+                <div class="mb-4">
+                    <label for="loginPassword" class="form-label">Password</label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="bi bi-lock"></i></span>
+                        <input type="password" class="form-control" id="loginPassword" placeholder="Enter your password" required>
+                    </div>
+                </div>
+                <div class="mb-4 form-check">
+                    <input type="checkbox" class="form-check-input" id="rememberMe">
+                    <label class="form-check-label" for="rememberMe">Remember me</label>
+                </div>
+                <button type="submit" class="btn btn-main w-100 mb-3">
+                    <i class="bi bi-box-arrow-in-right me-2"></i>Login
+                </button>
+                <div class="text-center mb-3">
+                    <a href="#" class="text-decoration-none">Forgot Password?</a>
+                </div>
+                <hr>
+                <div class="text-center">
+                    <p class="mb-2">Don't have an account?</p>
+                    <button type="button" class="btn btn-outline-secondary w-100">
+                        <i class="bi bi-person-plus me-2"></i>Create Account
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Login Overlay -->
+    <div class="login-overlay" id="loginOverlay"></div>
+
+    <!-- Footer Section -->
+    <footer class="footer">
+        <div class="container">
+            <div class="row g-4">
+                <!-- About Section -->
+                <div class="col-lg-4 col-md-6">
+                    <h5 class="footer-title">Moving Medicine</h5>
+                    <p class="footer-text">
+                        Your trusted partner for healthcare solutions. We provide quality
+                        medicines, wellness products, and healthcare services to keep you
+                        healthy.
+                    </p>
+                    <div class="social-links">
+                        <a href="#" class="social-icon"><i class="bi bi-facebook"></i></a>
+                        <a href="#" class="social-icon"><i class="bi bi-twitter"></i></a>
+                        <a href="#" class="social-icon"><i class="bi bi-instagram"></i></a>
+                        <a href="#" class="social-icon"><i class="bi bi-linkedin"></i></a>
+                    </div>
+                </div>
+
+                <!-- Quick Links -->
+                <div class="col-lg-2 col-md-6">
+                    <h5 class="footer-title">Quick Links</h5>
+                    <ul class="footer-links">
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="#">About Us</a></li>
+                        <li><a href="#">Services</a></li>
+                        <li><a href="shop.html">Shop</a></li>
+                        <li><a href="#">Contact</a></li>
+                    </ul>
+                </div>
+
+                <!-- Services -->
+                <div class="col-lg-2 col-md-6">
+                    <h5 class="footer-title">Services</h5>
+                    <ul class="footer-links">
+                        <li><a href="#">Prescription</a></li>
+                        <li><a href="#">Consultation</a></li>
+                        <li><a href="#">Diagnostics</a></li>
+                        <li><a href="#">Wellness</a></li>
+                        <li><a href="#">Home Delivery</a></li>
+                    </ul>
+                </div>
+
+                <!-- Contact Info -->
+                <div class="col-lg-4 col-md-6">
+                    <h5 class="footer-title">Contact Us</h5>
+                    <ul class="footer-contact">
+                        <li>
+                            <i class="bi bi-geo-alt-fill"></i>
+                            <span>123 Healthcare Street, Panabo City, Mindanao</span>
+                        </li>
+                        <li>
+                            <i class="bi bi-telephone-fill"></i>
+                            <span>+63 123 456 7890</span>
+                        </li>
+                        <li>
+                            <i class="bi bi-envelope-fill"></i>
+                            <span>info@movingmedicine.com</span>
+                        </li>
+                        <li>
+                            <i class="bi bi-clock-fill"></i>
+                            <span>Mon - Sat: 8:00 AM - 8:00 PM</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Footer Bottom -->
+            <div class="footer-bottom">
+                <div class="row align-items-center">
+                    <div class="col-md-6 text-center text-md-start">
+                        <p class="mb-0">
+                            &copy; 2025 Moving Medicine. All rights reserved.
+                        </p>
+                    </div>
+                    <div class="col-md-6 text-center text-md-end">
+                        <a href="#" class="footer-bottom-link">Privacy Policy</a>
+                        <span class="mx-2">|</span>
+                        <a href="#" class="footer-bottom-link">Terms of Service</a>
+                        <span class="mx-2">|</span>
+                        <a href="#" class="footer-bottom-link">Cookie Policy</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Back to Top Button -->
+    <button id="backToTop" class="back-to-top" title="Back to top">
+        <i class="bi bi-arrow-up"></i>
+    </button>
+
+    <!-- Bootstrap 5 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom JS -->
+    <script src="shop-script.js"></script>
+</body>
+</html>
