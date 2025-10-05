@@ -65,6 +65,16 @@ body {
   transform: scale(1.05);
 }
 
+/* Navbar Logo */
+.navbar-logo {
+  height: 40px;
+  width: auto;
+}
+
+.navbar-brand:hover .navbar-logo {
+  transform: rotate(-5deg) scale(1.1);
+}
+
 .nav-link {
   position: relative;
   font-weight: 500;
