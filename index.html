@@ -1276,18 +1276,19 @@
         }, 100);
       });
 
-      // Signup form submission
+      // Signup form submission - Save to localStorage
       document
         .getElementById("signupForm")
         .addEventListener("submit", function (e) {
           e.preventDefault();
-          const name = document.getElementById("signupName").value;
-          const email = document.getElementById("signupEmail").value;
-          const phone = document.getElementById("signupPhone").value;
+          const name = document.getElementById("signupName").value.trim();
+          const email = document.getElementById("signupEmail").value.trim();
+          const phone = document.getElementById("signupPhone").value.trim();
           const password = document.getElementById("signupPassword").value;
           const confirmPassword = document.getElementById(
             "signupConfirmPassword"
           ).value;
+          const submitBtn = this.querySelector('button[type="submit"]');
 
           // Validate passwords match
           if (password !== confirmPassword) {
@@ -1295,17 +1296,54 @@
             return;
           }
 
-          // Add your signup logic here
-          console.log("Signup attempt:", { name, email, phone });
-          alert(
-            "Account creation functionality would be implemented here.\nName: " +
-              name +
-              "\nEmail: " +
-              email
-          );
+          // Check if email already exists
+          let users = JSON.parse(localStorage.getItem('users')) || [];
+          const emailExists = users.find(u => u.email === email);
+          
+          if (emailExists) {
+            alert("Email already registered! Please use a different email.");
+            return;
+          }
 
-          // Close the signup sidebar after submission
-          closeSignupSidebar();
+          // Show loading state
+          submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Creating account...';
+          submitBtn.disabled = true;
+
+          // Simulate account creation delay
+          setTimeout(() => {
+            // Create new user object
+            const newUser = {
+              id: Date.now(),
+              name: name,
+              email: email,
+              phone: phone,
+              role: 'Customer',
+              status: 'Active',
+              registeredAt: new Date().toISOString()
+            };
+
+            // Add to users array
+            users.push(newUser);
+            
+            // Save to localStorage
+            localStorage.setItem('users', JSON.stringify(users));
+
+            // Show success state
+            submitBtn.innerHTML = '<i class="bi bi-check-circle me-2"></i>Account Created!';
+            submitBtn.classList.add('btn-success');
+
+            // Show success notification
+            showNotification("Account created successfully! You can now login.");
+
+            // Reset form and close after delay
+            setTimeout(() => {
+              this.reset();
+              closeSignupSidebar();
+              submitBtn.innerHTML = '<i class="bi bi-person-check me-2"></i>Create Account';
+              submitBtn.classList.remove('btn-success');
+              submitBtn.disabled = false;
+            }, 1500);
+          }, 1000);
         });
     </script>
   </body>

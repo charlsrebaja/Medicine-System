@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings - Moving Medicine</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="admin-style.css">
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <h4><i class="bi bi-heart-pulse-fill"></i> Moving Medicine</h4>
+            <p class="sidebar-subtitle">Admin Panel</p>
+        </div>
+        <ul class="nav flex-column">
+            <li class="nav-item"><a class="nav-link" href="admin-dashboard.html"><i class="bi bi-house-door"></i> Dashboard</a></li>
+            <li class="nav-item"><a class="nav-link" href="manage_products.html"><i class="bi bi-box-seam"></i> Products</a></li>
+            <li class="nav-item"><a class="nav-link" href="manage_users.html"><i class="bi bi-people"></i> Users</a></li>
+            <li class="nav-item"><a class="nav-link" href="manage_orders.html"><i class="bi bi-cart3"></i> Orders</a></li>
+            <li class="nav-item"><a class="nav-link active" href="settings.html"><i class="bi bi-gear"></i> Settings</a></li>
+            <li class="nav-item mt-auto"><a class="nav-link logout-link" href="#" onclick="logout()"><i class="bi bi-box-arrow-left"></i> Logout</a></li>
+        </ul>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content" id="mainContent">
+        <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom">
+            <div class="container-fluid">
+                <button class="btn btn-link" id="sidebarToggle"><i class="bi bi-list fs-4"></i></button>
+                <div class="ms-auto d-flex align-items-center">
+                    <span class="me-3">Welcome, Admin</span>
+                    <div class="dropdown">
+                        <button class="btn btn-link dropdown-toggle" type="button" id="userDropdown" data-bs-toggle="dropdown">
+                            <i class="bi bi-person-circle fs-4"></i>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="settings.html"><i class="bi bi-person"></i> Profile</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item text-danger" href="#" onclick="logout()"><i class="bi bi-box-arrow-right"></i> Logout</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <div class="container-fluid p-4">
+            <div class="row mb-4">
+                <div class="col">
+                    <h2 class="fw-bold">Settings</h2>
+                    <p class="text-muted">Manage your admin profile and system settings</p>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-6 mb-4">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="mb-0"><i class="bi bi-person-circle me-2"></i>Profile Settings</h5>
+                        </div>
+                        <div class="card-body">
+                            <form id="profileForm">
+                                <div class="mb-3">
+                                    <label class="form-label">Full Name</label>
+                                    <input type="text" class="form-control" value="Admin User" id="adminName">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Email</label>
+                                    <input type="email" class="form-control" value="admin@gmail.com" id="adminEmail" readonly>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Phone</label>
+                                    <input type="tel" class="form-control" value="+63 123 456 7890" id="adminPhone">
+                                </div>
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="bi bi-check-circle me-2"></i>Save Changes
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-6 mb-4">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="mb-0"><i class="bi bi-shield-lock me-2"></i>Change Password</h5>
+                        </div>
+                        <div class="card-body">
+                            <form id="passwordForm">
+                                <div class="mb-3">
+                                    <label class="form-label">Current Password</label>
+                                    <input type="password" class="form-control" id="currentPassword">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">New Password</label>
+                                    <input type="password" class="form-control" id="newPassword">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Confirm New Password</label>
+                                    <input type="password" class="form-control" id="confirmPassword">
+                                </div>
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="bi bi-key me-2"></i>Update Password
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-6 mb-4">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="mb-0"><i class="bi bi-database me-2"></i>Data Management</h5>
+                        </div>
+                        <div class="card-body">
+                            <p class="text-muted">Manage your data and exports</p>
+                            <button class="btn btn-success mb-2 w-100" onclick="exportAllData()">
+                                <i class="bi bi-download me-2"></i>Export All Data
+                            </button>
+                            <button class="btn btn-warning mb-2 w-100" onclick="addSampleData()">
+                                <i class="bi bi-plus-circle me-2"></i>Add Sample Data
+                            </button>
+                            <button class="btn btn-danger w-100" onclick="clearAllData()">
+                                <i class="bi bi-trash me-2"></i>Clear All Data
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-6 mb-4">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="mb-0"><i class="bi bi-info-circle me-2"></i>System Information</h5>
+                        </div>
+                        <div class="card-body">
+                            <ul class="list-unstyled">
+                                <li class="mb-2"><strong>System:</strong> Moving Medicine Admin v1.0</li>
+                                <li class="mb-2"><strong>Last Login:</strong> <span id="lastLogin">-</span></li>
+                                <li class="mb-2"><strong>Browser:</strong> <span id="browserInfo">-</span></li>
+                                <li class="mb-2"><strong>Storage Used:</strong> <span id="storageUsed">-</span></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="admin-script.js"></script>
+    <script>
+        // Settings page specific functions
+        document.getElementById('profileForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            showNotification('Profile updated successfully!', 'success');
+        });
+
+        document.getElementById('passwordForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const newPass = document.getElementById('newPassword').value;
+            const confirmPass = document.getElementById('confirmPassword').value;
+            if (newPass !== confirmPass) {
+                showNotification('Passwords do not match!', 'error');
+                return;
+            }
+            showNotification('Password updated successfully!', 'success');
+            this.reset();
+        });
+
+        // Display system info
+        document.getElementById('lastLogin').textContent = new Date().toLocaleString();
+        document.getElementById('browserInfo').textContent = navigator.userAgent.split('(')[1].split(')')[0];
+        
+        // Calculate storage
+        let storageSize = 0;
+        for (let key in localStorage) {
+            if (localStorage.hasOwnProperty(key)) {
+                storageSize += localStorage[key].length + key.length;
+            }
+        }
+        document.getElementById('storageUsed').textContent = (storageSize / 1024).toFixed(2) + ' KB';
+
+        function exportAllData() {
+            const data = {
+                products: JSON.parse(localStorage.getItem('products') || '[]'),
+                users: JSON.parse(localStorage.getItem('users') || '[]'),
+                orders: JSON.parse(localStorage.getItem('orders') || '[]')
+            };
+            const dataStr = JSON.stringify(data, null, 2);
+            const dataBlob = new Blob([dataStr], { type: 'application/json' });
+            const url = URL.createObjectURL(dataBlob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = 'all-data-backup-' + new Date().toISOString().split('T')[0] + '.json';
+            link.click();
+            URL.revokeObjectURL(url);
+            showNotification('Data exported successfully!', 'success');
+        }
+    </script>
+</body>
+</html>

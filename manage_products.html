@@ -3,8 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Panel Dashboard</title>
+    <title>Manage Products - Moving Medicine</title>
     
+    <!-- Poppins Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Bootstrap Icons -->
@@ -21,12 +23,12 @@
         </div>
         <ul class="nav flex-column">
             <li class="nav-item">
-                <a class="nav-link active" href="admin-dashboard.html">
+                <a class="nav-link" href="admin-dashboard.html">
                     <i class="bi bi-house-door"></i> Dashboard
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="manage_products.html">
+                <a class="nav-link active" href="manage_products.html">
                     <i class="bi bi-box-seam"></i> Products
                 </a>
             </li>
@@ -79,9 +81,17 @@
 
         <!-- Dashboard Content -->
         <div class="container-fluid p-4">
-            <!-- Stats Cards -->
+            <!-- Page Header -->
             <div class="row mb-4">
-                <div class="col-xl-3 col-md-6 mb-3">
+                <div class="col">
+                    <h2 class="fw-bold">Manage Products</h2>
+                    <p class="text-muted">Add, edit, or delete products from your inventory</p>
+                </div>
+            </div>
+
+            <!-- Stats Summary -->
+            <div class="row mb-4">
+                <div class="col-md-4">
                     <div class="card stat-card stat-card-primary text-white">
                         <div class="card-body">
                             <div class="d-flex justify-content-between align-items-center">
@@ -94,50 +104,37 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-xl-3 col-md-6 mb-3">
+                <div class="col-md-4">
                     <div class="card stat-card stat-card-success text-white">
                         <div class="card-body">
                             <div class="d-flex justify-content-between align-items-center">
                                 <div>
-                                    <h6 class="text-uppercase mb-1">Total Users</h6>
-                                    <h2 class="mb-0" id="totalUsers">0</h2>
+                                    <h6 class="text-uppercase mb-1">In Stock</h6>
+                                    <h2 class="mb-0" id="inStockProducts">0</h2>
                                 </div>
-                                <i class="bi bi-people fs-1"></i>
+                                <i class="bi bi-check-circle fs-1"></i>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="col-xl-3 col-md-6 mb-3">
+                <div class="col-md-4">
                     <div class="card stat-card stat-card-warning text-white">
                         <div class="card-body">
                             <div class="d-flex justify-content-between align-items-center">
                                 <div>
-                                    <h6 class="text-uppercase mb-1">Total Orders</h6>
-                                    <h2 class="mb-0" id="totalOrders">0</h2>
+                                    <h6 class="text-uppercase mb-1">Low Stock</h6>
+                                    <h2 class="mb-0" id="lowStockProducts">0</h2>
                                 </div>
-                                <i class="bi bi-cart3 fs-1"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-xl-3 col-md-6 mb-3">
-                    <div class="card stat-card stat-card-info text-white">
-                        <div class="card-body">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div>
-                                    <h6 class="text-uppercase mb-1">Revenue</h6>
-                                    <h2 class="mb-0">$<span id="totalRevenue">0</span></h2>
-                                </div>
-                                <i class="bi bi-currency-dollar fs-1"></i>
+                                <i class="bi bi-exclamation-triangle fs-1"></i>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- CRUD Section Header -->
+            <!-- Action Header -->
             <div class="d-flex justify-content-between align-items-center mb-3">
-                <h3>Manage Products</h3>
+                <h4>Product List</h4>
                 <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#productModal" onclick="resetForm()">
                     <i class="bi bi-plus-circle"></i> Add New Product
                 </button>
@@ -146,7 +143,7 @@
             <!-- Search and Filter -->
             <div class="card mb-4">
                 <div class="card-body">
-                    <div class="row">
+                    <div class="row g-3">
                         <div class="col-md-6">
                             <input type="text" class="form-control" id="searchInput" placeholder="Search products...">
                         </div>
@@ -171,7 +168,7 @@
             <!-- Products Table -->
             <div class="card">
                 <div class="card-header bg-white">
-                    <h5 class="mb-0">Product List</h5>
+                    <h5 class="mb-0">All Products</h5>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">

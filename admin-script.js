@@ -4,9 +4,36 @@ let deleteProductId = null;
 
 // Initialize the dashboard when DOM is loaded
 document.addEventListener('DOMContentLoaded', function() {
+    checkAuth();
     initializeDashboard();
     setupEventListeners();
 });
+
+// Check if user is authenticated
+function checkAuth() {
+    const isLoggedIn = localStorage.getItem('isAdminLoggedIn');
+    if (!isLoggedIn) {
+        // Redirect to homepage if not logged in
+        window.location.href = 'index.html';
+    }
+}
+
+// Logout functionality
+function logout() {
+    if (confirm('Are you sure you want to logout?')) {
+        // Clear login status
+        localStorage.removeItem('isAdminLoggedIn');
+        localStorage.removeItem('adminEmail');
+        
+        // Show logout animation
+        showNotification('Logging out...', 'info');
+        
+        // Redirect to homepage after short delay
+        setTimeout(() => {
+            window.location.href = 'index.html';
+        }, 1000);
+    }
+}
 
 // Initialize dashboard
 function initializeDashboard() {
@@ -47,6 +74,7 @@ function setupEventListeners() {
             }
         });
     });
+
 }
 
 // Load products from localStorage and display
